@@ -1,0 +1,44 @@
+                  // C INTRO
+
+w3-1  sizeof
+w4-1  scanf datatype
+w4-2  scanf %[^aeiou]
+w4-5  scanf %[HUST0123456789]
+w4-t  scanf *c
+w6-5  random
+w7-3  prime number
+w7-4  n!
+w8-3  delete spaces
+w8-4  replace \n and \\
+w9-4  leap year
+w10   sort, reverse, input, symmetric array
+w11   rotate 3 values
+w13   sub array
+w14   check in string, count space, replace char, strend, isalpha, is digit
+w15-1 datecmp, format date, leap year
+
+
+w8   n!, average, del blank, replace tab and \\
+w10  array, mul matrix
+w12   pointer
+w13   reverse array 2 wayss
+w14   find product
+w15-1 date
+w15-2 student
+w15-3 fraction
+tt-3  input string and string
+jav   restaurant list, search name, food, lowercase
+
+
+                // C BASIC
+
+w1-1  conpare VN name, sort name, count lastname frequency
+w1-2  generate random Eng sentences
+w1-3  calculate e^x using arg
+w1-test another version of ex1 but using struct and arr instead of pointer
+w1-tt find median,
+      compare 2 arrays about equality and symmetry
+      count the frequency of each letter in a string
+      split sentence to words
+      calculate rectangle's area and perimeter using arg
+      word replication using arg
