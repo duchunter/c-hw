@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void ex(int x, double precision) {
-	double sum = 1, oldSum, denominator;
+	double sum = 1, oldSum, denominator, absolute;
 	int n = 1, i;
 
 	do {
@@ -23,7 +23,10 @@ void ex(int x, double precision) {
 		sum += power / denominator;
 		n++;
 
-	} while (sum - oldSum > precision);
+		// Calculate absolute diff
+		absolute = sum > oldSum ? sum - oldSum : oldSum - sum;
+
+	} while (absolute > precision);
 
 	printf("e^x= %.10lf\n", sum);
 }
