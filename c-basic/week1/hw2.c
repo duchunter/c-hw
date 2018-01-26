@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 
+#define MAX 5;
+
 // Words library
 char *article[] = {
   "the", "a", "one", "some", "any"
@@ -19,7 +21,7 @@ char *prep[] = {
 
 // Get a random number
 int getRand() {
-  return rand() % 5;
+  return rand() % MAX;
 }
 
 int main(int argc, char const *argv[]) {
@@ -44,7 +46,7 @@ int main(int argc, char const *argv[]) {
 
     // Uppercase the first letter
     sentence[0] = sentence[0] - 'a' + 'A';
-    
+
     printf("%d.\t%s\n", x + 1, sentence);
   }
 

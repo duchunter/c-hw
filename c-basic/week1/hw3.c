@@ -32,7 +32,7 @@ void ex(int x, double precision) {
 }
 
 int main(int argc, char const *argv[]) {
-	if (argc < 2) {
+	if (argc < 2 || argc > 3) {
 		// Just program name, no params
 		printf("Invalid syntax, should be: ./hw3 'x' 'precision'(OPTIONAL)\n");
 	} else if (argc == 2) {
