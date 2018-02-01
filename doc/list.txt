@@ -18,10 +18,10 @@ w14   check in string, count space, replace char, strend, isalpha, is digit
 w15-1 datecmp, format date, leap year
 
 
-w8   n!, average, del blank, replace tab and \\
-w10  array, mul matrix
+w8    n!, average, del blank, replace tab and \\
+w10   array, mul matrix
 w12   pointer
-w13   reverse array 2 wayss
+w13   reverse array 2 ways
 w14   find product
 w15-1 date
 w15-2 student
@@ -42,3 +42,16 @@ w1-tt find median,
       split sentence to words
       calculate rectangle's area and perimeter using arg
       word replication using arg
+
+w2-1  argcv, replace a string in a string with a string
+w2-s1 just print new str, not save to var
+w2-replace  hw1 but use strstr() to find substring
+w2-2  argcv, copy a file to a new file
+w2-3  argcv, transform content of a file to uppercase
+w2-transform  hw3 but move file pointer back instead of re-open file
+w2-tt-1 split int and frac part of a double using pointer
+w2-tt-2 replace a char in a string with a char
+w2-tt-3 solve ax^2 + bx + c using command line arg
+w2-tt-4 open and close file
+w2-tt-5 copy file
+w2-tt-6 a -> A and vice versa from a file to a new file
