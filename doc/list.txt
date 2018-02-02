@@ -55,3 +55,7 @@ w2-tt-3 solve ax^2 + bx + c using command line arg
 w2-tt-4 open and close file
 w2-tt-5 copy file
 w2-tt-6 a -> A and vice versa from a file to a new file
+
+w3-1  encrypt and decrypt file
+w3-2  count char in a file and save result to external file
+w3-3  another version of "cat" command, add "-p" to display page and more page
