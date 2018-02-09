@@ -1,149 +1,195 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
-enum {SUCCESS, FAIL};
+enum { LINE = 80, FILELINE = 200 };
 
-void parse(double n, int *i, double *r) {
-    *i = (int)n;
-    *r = n - *i;
+typedef struct {
+    double x;
+    double y;
+} point;
+
+typedef struct {
+    point center;
+    double radius;
+} circle;
+
+int in_circle(point p, circle c) {
+    return c.radius > sqrt(pow(p.x - c.center.x, 2) + pow(p.y - c.center.y, 2));
 }
 
-void replace(char *str, char c1, char c2) {
-    if (str == NULL) return;
+char *mystrcat(char *str1, char *str2) {
+    int len1, len2;
+    char *result;
 
-    while (*str != '\0') {
-        if (*str == c1) *str = c2;
-        str++;
+    len1 = strlen(str1);
+    len2 = strlen(str2);
+
+    result = (char *)malloc((len1 + len2 + 1) * sizeof(char));
+    if (result == NULL) {
+        printf("Cannot allocate memory\n");
+        return NULL;
     }
+
+    strcpy(result, str1);
+    strcpy(result + len1, str2);
+
+    return result;
 }
 
 int main (int argc, char *argv[]) {
-    /* EX1: split int and frac part of a double
-    double n, r;
-    int i;
-    printf("Enter a real number: ");
-    scanf("%lf", &n);
-    parse(n, &i, &r);
-    printf("Integer part: %d\nReal part: %lf\n", i, r);
-    */
+    /* Ex1: dynamic reverse array + Ex2: input more using realloc
+    int i, n, m, *p;
 
-    /* EX2: replace char c1 by char c2 in a string
-    char str[100], c1, c2;
-    printf("Enter a string: ");
-    fgets(str, 100, stdin);
-    printf("Enter character 1: ");
-    c1 = getchar();
-    getchar();
-    printf("Enter character 2: ");
-    c2 = getchar();
-    getchar();
-    replace(str, c1, c2);
-    printf("New string is: %s", str);
-    */
+    printf("How many numbers do you want to enter?: ");
+    scanf("%d", &n);
 
-    /* EX3: solve ax^2 + bx + c using command line arg
-    if (argc != 4) {
-        printf("Invalid syntax, should be ./tt 'a' 'b' 'c'\n");
+    // Allocate memory
+    p = (int *)malloc(n * sizeof(int));
+    if (p == NULL) {
+        printf("Memory allocation failed!\n");
         return 1;
     }
 
-    float a = atof(argv[1]);
-    float b = atof(argv[2]);
-    float c = atof(argv[3]);
-    double delta = (b * b) - (4 * a * c);
-    if (a == 0) {
-        if (b == 0 && c != 0) {
-            printf("Cannot solve\n");
-        } else if (b == 0 && c == 0) {
-            printf("Infinite solution\n");
-        } else {
-            printf("x = %f\n", -c / b);
-        }
-        return 0;
+    // Get the numbers from the user
+    for (i = 0; i < n; i++) {
+        printf("- Number %d: ", i + 1);
+        scanf("%d", p + i);
     }
 
-    if (delta < 0) {
-        printf("No solution\n");
-    } else if (delta == 0) {
-        printf("x1 = x2 = %f\n", -b / (2 * a));
+    // Display in reverse
+    printf("Reverse array is: ");
+    for (i = n - 1; i >= 0; i--) {
+        printf("%d ", *(p + i));
+    }
+
+    printf("\n");
+
+    // Ex2: ask for more number
+    printf("How many numbers do you want to add more?: ");
+    scanf("%d", &m);
+    p = (int *)realloc(p, (m + n) * sizeof(int));
+    for (i = n; i < m + n; i++) {
+        printf("Additional number %d: ", i + 1);
+        scanf("%d", p + i);
+    }
+
+    // Display in reverse
+    printf("Reverse array is: ");
+    for (i = m + n - 1; i >= 0; i--) {
+        printf("%d ", *(p + i));
+    }
+
+    printf("\n");
+
+    // Free the allocated space
+    free(p);
+    */
+    /* Ex2-example
+    char *str;
+
+    // Initial allocation
+    str = (char *)malloc(15);
+    strcpy(str, "tutorialspoint");
+    printf("String = %s, Address = %p\n", str, str);
+
+    // Reallocating
+    str = (char *)realloc(str, 25);
+    strcat(str, ".com");
+    printf("String = %s, Address = %p\n", str, str);
+
+    free(str);
+    */
+    /* Ex3: my strcat
+    if (argc != 3) {
+        printf("Invalid syntax\n");
+        return 1;
+    }
+    char *result = mystrcat(argv[1], argv[2]);
+    if (result == NULL) return 1;
+    printf("%s\n", result);
+    */
+    /*Ex4 in circle
+    point p;
+    circle c;
+    printf("Enter a point:\n- x: ");
+    scanf("%lf", &p.x);
+    printf("- y: ");
+    scanf("%lf", &p.y);
+    printf("Enter a circle:\n- Center:\n\t+ x: ");
+    scanf("%lf", &c.center.x);
+    printf("\t+ y: ");
+    scanf("%lf", &c.center.y);
+    printf("- Radius: ");
+    scanf("%lf", &c.radius);
+    if (in_circle(p, c)) {
+        printf("This point is in circle\n");
     } else {
-        printf("x1 = %f\n", (-b + sqrt(delta)) / (2 * a));
-        printf("x2 = %f\n", (-b - sqrt(delta)) / (2 * a));
+        printf("This point is out of circle\n");
     }
     */
-
-    /* EX4: open and close file
-    FILE *fptr;
-    char *filename = argv[1];
-    int reval = SUCCESS;
+    /* Ex5: read file, print line length + line
     if (argc != 2) {
         printf("Invalid syntax\n");
         return 1;
     }
 
-    if ((fptr = fopen(filename, "r")) == NULL) {
-        printf("Cannot open %s\n", filename);
-        reval = FAIL;
-    } else {
-        printf("The value of fptr: %p\n", fptr);
-        printf("Ready to close file\n");
-        fclose(fptr);
+    FILE *fptr;
+    if ((fptr = fopen(argv[1], "r")) == NULL) {
+        printf("Cannot open '%s'", argv[1]);
+        return 1;
     }
 
-    return reval;
+    char str[FILELINE][LINE + 4];
+    int x = 0;
+    while (fgets(str[x], LINE, fptr) != NULL) {
+        x++;
+    }
+
+    fclose(fptr);
+    if ((fptr = fopen(argv[1], "w")) == NULL) {
+        printf("Cannot open '%s'", argv[1]);
+        return 1;
+    }
+
+    for (int y = 0; y < x; y++) {
+        fprintf(fptr, "%d\t%s", strlen(str[y]), str[y]);
+    }
+    fclose(fptr);
     */
-
-    /* EX5: copy file
-    FILE *fptr1, *fptr2;
-    if ((fptr1 = fopen("text.txt", "r")) == NULL) {
-        printf("Cannot open source file\n");
+    // Ex6: merge 2 file
+    if (argc != 4) {
+        printf("Invalid syntax\n");
         return 1;
     }
 
-    if ((fptr2 = fopen("newtext.txt", "w+")) == NULL) {
-        printf("Cannot open copy file");
+    FILE *f1, *f2, *f3;
+    if ((f1 = fopen(argv[1], "r")) == NULL) {
+        printf("Cannot open %s", argv[1]);
         return 1;
     }
 
-    char ch;
-    printf("Copying file...\n");
-    while ((ch = fgetc(fptr1)) != EOF) {
-        fputc(ch, fptr2);
-    }
-
-    fclose(fptr1);
-    fclose(fptr2);
-    */
-
-    /* EX6: a -> A and vice versa from a file*/
-    FILE *fptr1, *fptr2;
-    if ((fptr1 = fopen("text.txt", "r")) == NULL) {
-        printf("Cannot open source file\n");
+    if ((f2 = fopen(argv[2], "r")) == NULL) {
+        printf("Cannot open %s", argv[2]);
         return 1;
     }
 
-    if ((fptr2 = fopen("newtext.txt", "w+")) == NULL) {
-        printf("Cannot open copy file");
+    if ((f3 = fopen(argv[3], "w+")) == NULL) {
+        printf("Cannot open %s", argv[3]);
         return 1;
     }
 
-    char ch;
-    printf("Copying file and change letters...\n");
-    while ((ch = fgetc(fptr1)) != EOF) {
-        if ('a' <= ch && ch <= 'z') {
-            fputc(ch - 'a' + 'A', fptr2);
-        } else if ('A' <= ch && ch <= 'Z') {
-            fputc(ch - 'A' + 'a', fptr2);
-        } else {
-            fputc(ch, fptr2);
-        }
-
+    char buff1[LINE], buff2[LINE];
+    int a, b;
+    while (1) {
+        if (a = fgets(buff1, LINE, f1) != NULL) fputs(buff1, f3);
+        if (b = fgets(buff2, LINE, f2) != NULL) fputs(buff2, f3);
+        if (!a && !b) break;
     }
-
-    fclose(fptr1);
-    fclose(fptr2);
+    fclose(f1);
+    fclose(f2);
+    fclose(f3);
 
     return 0;
 }

@@ -19,7 +19,7 @@ void mycat(FILE *source, int pageMode) {
 int main(int argc, char const *argv[]) {
   // Invalid syntax
   if (argc != 2 && argc != 3) {
-    printf("Invalid syntax, should be: ./hw3 'source' |-p|\n");
+    printf("Invalid syntax, should be: ./mycat 'source' |-p|\n");
     return 1;
   }
 

@@ -45,7 +45,7 @@ void crypto(FILE *target, int diff, int encrypt) {
 int main(int argc, char const *argv[]) {
   // Wrong syntax
   if (argc != 4) {
-    printf("Invalid syntax, should be: ./hw1 'flag' 'filename' 'displacement'\n");
+    printf("Invalid syntax, should be: ./crypto 'flag' 'filename' 'displacement'\n");
     return 1;
   }
 

@@ -3,7 +3,7 @@
 int main(int argc, char const *argv[]) {
   // Wrong syntax
   if (argc != 3) {
-    printf("Invalid syntax, should be: ./hw2 'source-file' 'new-file'\n");
+    printf("Invalid syntax, should be: ./mycp 'source-file' 'new-file'\n");
     return 1;
   }
 
