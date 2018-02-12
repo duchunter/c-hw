@@ -18,12 +18,12 @@ typedef struct {
 } student;
 
 void getData(char *str, char *target) {
-  printf("%s\n", str);
-  char *ptr = strchr(str, ' ');
-  printf("%s\n", ptr);
+  printf("str: %s\n", str);
+  char *ptr = strchr(str, '|');
+  printf("ptr: %s\n", ptr);
   int length = ptr - str;
-  strncpy(target, str, length - 1);
-  printf("%s\n", target);
+  strncpy(target, str, length);
+  printf("target: %s\n", target);
 }
 
 int main(int argc, char const *argv[]) {
