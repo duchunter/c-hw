@@ -2,90 +2,86 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum {
-  LINE = 80
-};
-
-char *sourceFile = "list.txt";
-char *resultFile = "result.txt";
+#define MAX_LINE 80
+#define SOURCE "list.txt"
+#define DEST "result.txt"
+#define DIV '\t'
 
 typedef struct {
   int number;
   char id[30];
   char name[30];
   char phone[30];
-  double grade;
+  float mark;
 } student;
 
-void getData(char *str, char *target) {
-  printf("%s\n", str);
-  char *ptr = strchr(str, ' ');
-  printf("%s\n", ptr);
-  int length = ptr - str;
-  strncpy(target, str, length - 1);
-  printf("%s\n", target);
+student parseLine(FILE *read, FILE *write) {
+  student stu;
+  char *line = (char *) malloc(MAX_LINE * sizeof(char));
+  if (fgets(line, MAX_LINE, read) == NULL) {
+    stu.number = -1;
+    return stu;
+  }
+
+  int l = 0;
+  char *p_start = line;
+  char *p_end = NULL;
+  while ((p_end = strchr(p_start, DIV)) != NULL) {
+    *p_end = '\0';
+
+    // Do sth with the string p_start
+    switch (l) {
+      case 0:
+        stu.number = atoi(p_start);
+        break;
+      case 1:
+        strcpy(stu.id, p_start);
+        break;
+      case 2:
+        strcpy(stu.name, p_start);
+        break;
+    }
+
+    l++;
+    p_start = p_end + 1;
+  }
+
+  // Do sth with the string p_start
+  *(p_start + strlen(p_start) - 1) = '\0';
+  strcpy(stu.phone, p_start);
+
+  // Input mark
+  printf("%d - %s - Mark: ", stu.number, stu.name);
+  scanf("%f", &stu.mark);
+
+  // Write to destination file
+  fprintf(
+    write,
+    "%d%c%s%c%s%c%s%c%.2f\n",
+    stu.number, DIV, stu.id, DIV, stu.name, DIV, stu.phone, DIV, stu.mark
+  );
+
+  free(line);
+  return stu;
 }
+
 
 int main(int argc, char const *argv[]) {
   // Open file
-  FILE *source, *result;
-  if ((source = fopen(sourceFile, "r")) == NULL) {
-    printf("Cannot open %s\n", sourceFile);
+  FILE *src, *dest;
+  if ((src = fopen(SOURCE, "r")) == NULL) {
+    printf("Cannot open %s\n", SOURCE);
     return 1;
   }
 
-  if ((result = fopen(resultFile, "w+")) == NULL) {
-    printf("Cannot create %s\n", resultFile);
+  if ((dest = fopen(DEST, "w+")) == NULL) {
+    printf("Cannot create %s\n", DEST);
     return 1;
   }
 
-  // Save data into an array
-  student *list = (student *) malloc(sizeof(student));
-  int length = 0;
-  char line[LINE + 1], data[30], *ptr;
+  while (parseLine(src, dest).number != -1);
 
-  while (fgets(line, LINE, source) != NULL) {
-    length++;
-    ptr = line;
-
-    // Get number
-    getData(ptr, data);
-    list[length - 1].number = atoi(data);
-    ptr += strlen(data) + 1;
-
-    // Get id
-    getData(ptr, data);
-    //list[length - 1].id = (char *) malloc(strlen(data) * sizeof(char));
-    strcpy(list[length - 1].id, data);
-    ptr += strlen(data) + 1;
-
-    // Get name
-    getData(ptr, data);
-    //list[length - 1].name = (char *) malloc(strlen(data) * sizeof(char));
-    strcpy(list[length - 1].name, data);
-    ptr += strlen(data) + 1;
-
-    // Get phone number
-    getData(ptr, data);
-    //list[length - 1].phone = (char *) malloc(strlen(data) * sizeof(char));
-    strcpy(list[length - 1].phone, data);
-    ptr += strlen(data) + 1;
-
-    list = (student *) realloc(list, 1 + sizeof(student));
-  }
-
-  for (int x = 0; x < length; x++) {
-    printf(
-      "%d\t%s\t%s\t%s\n",
-      list[x].number,
-      list[x].id,
-      list[x].name,
-      list[x].phone
-    );
-  }
-
-  fclose(source);
-  fclose(result);
-  free(list);
+  fclose(src);
+  fclose(dest);
   return 0;
 }
