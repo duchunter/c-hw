@@ -9,9 +9,9 @@
 
 typedef struct {
   int number;
-  char id[30];
-  char name[30];
-  char phone[30];
+  char *id;
+  char *name;
+  char *phone;
   float mark;
 } student;
 
@@ -35,9 +35,11 @@ student parseLine(FILE *read, FILE *write) {
         stu.number = atoi(p_start);
         break;
       case 1:
+        stu.id = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
         strcpy(stu.id, p_start);
         break;
       case 2:
+        stu.name = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
         strcpy(stu.name, p_start);
         break;
     }
@@ -48,6 +50,7 @@ student parseLine(FILE *read, FILE *write) {
 
   // Do sth with the string p_start
   *(p_start + strlen(p_start) - 1) = '\0';
+  stu.phone = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
   strcpy(stu.phone, p_start);
 
   // Input mark
@@ -79,8 +82,34 @@ int main(int argc, char const *argv[]) {
     return 1;
   }
 
-  while (parseLine(src, dest).number != -1);
+  // Initial list
+  int l = 0;
+  student *list = (student *) malloc(sizeof(student));
 
+  // Parse line in file to get data
+  student temp;
+  while (1) {
+    temp = parseLine(src, dest);
+
+    // Break if end of file
+    if (temp.number == -1) {
+      break;
+    }
+
+    // Increase length, realloc and add to list
+    l++;
+    list = (student *) realloc(list, l * sizeof(student));
+    list[l - 1] = temp;
+  }
+
+  // Free data and close file
+  for (int x = 0; x < l; x++) {
+    free(list[x].id);
+    free(list[x].name);
+    free(list[x].phone);
+  }
+
+  free(list);
   fclose(src);
   fclose(dest);
   return 0;

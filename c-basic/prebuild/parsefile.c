@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX 80
+#define MAX_LINE 80
 
 int parseLine(FILE *f, char divider) {
-  char *line = (char *) malloc(MAX * sizeof(char));
-  if (fgets(line, MAX, f) == NULL) {
+  char *line = (char *) malloc(MAX_LINE * sizeof(char));
+  if (fgets(line, MAX_LINE, f) == NULL) {
     return 0;
   }
 
