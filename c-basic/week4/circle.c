@@ -57,9 +57,18 @@ int main(int argc, char const *argv[]) {
 
   // Allocating memory for an array and a check intersection table
   circle *arr = (circle *) malloc(n * sizeof(circle));
-  int **table = (int **)malloc(n * sizeof(int *));
+  int **table = (int **) malloc(n * sizeof(int *));
+  if (arr = NULL || table == NULL) {
+    printf("Memory allocation failed\n");
+    return 1;
+  }
+
   for (i = 0; i < n; i++) {
     table[i] = (int *) malloc((i + 1) * sizeof(int));
+    if (table[i] == NULL) {
+      printf("Memory allocation failed\n");
+      return 1;
+    }
   }
 
   // Generate circles and chek intersection with all previous circles

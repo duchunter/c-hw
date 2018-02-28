@@ -59,3 +59,19 @@ w2-tt-6 			a -> A and vice versa from a file to a new file
 w3-1  	encrypt and decrypt file
 w3-2  	count char in a file and save result to external file
 w3-3  	another version of "cat" command, add "-p" to display page and more page
+
+
+w4-tt-1+2     dynamically reverse array and ask for more input using alloc
+w4-tt-3       my strcat using malloc
+w4-tt-4       check if in circle
+w4-tt-5       read file, print line length + line
+w4-tt-6       merge 2 files
+w4-substrc    return substr with 'number' char that start from 'offset' of a str
+w4-circle     check if 2 circle intercept, dynamically add circle by either
+              manually input or randomly generate, print info about circle
+              print circle with most interception and circles it intercept with
+w4-student    read a student list from a file, dynamically added to an array,
+              ask for grade input an write to an output file
+w4-filter     read words from a file and dynamically add to an array,
+              read a file, replace all negative word by special char
+              print new content to the screen

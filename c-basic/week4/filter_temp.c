@@ -6,61 +6,37 @@
 #define DIV ','
 #define MAX_LINE 80
 
-int parseLine(FILE *f, char ***words, int l) {
+int parseLine(FILE *f, char words[][30], int l) {
   char *line = (char *) malloc(MAX_LINE * sizeof(char));
-  if (line == NULL) {
-    printf("Memory allocation failed\n");
-    return 0;
-  }
-
   if (fgets(line, MAX_LINE, f) == NULL) {
     return 0;
   }
 
+  int n = l;
   char *p_start = line;
   char *p_end = NULL;
   while ((p_end = strchr(p_start, DIV)) != NULL) {
     *p_end = '\0';
 
     // Do sth with that string
-    *words = (char **) realloc(*words, (l + 1) * sizeof(char *));
-    if (*words == NULL) {
-      printf("Memory allocation failed\n");
-      return 0;
-    }
-
-    (*words)[l] = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
-    if ((*words)[l] == NULL) {
-      printf("Memory allocation failed\n");
-      return 0;
-    }
-
-    strcpy((*words)[l], p_start);
-    l++;
+    //words = realloc(words, (n + 1) * sizeof(char *));
+    //words[n] = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
+    strcpy(words[n], p_start);
+    n++;
     p_start = p_end + 1;
   }
 
   if (strlen(p_start) > 1) {
     // Do sth with that string
     *(p_start + strlen(p_start) - 1) = '\0';
-    *words = (char **) realloc(*words, (l + 1) * sizeof(char *));
-    if (*words == NULL) {
-      printf("Memory allocation failed\n");
-      return 0;
-    }
-
-    (*words)[l] = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
-    if ((*words)[l] == NULL) {
-      printf("Memory allocation failed\n");
-      return 0;
-    }
-
-    strcpy((*words)[l], p_start);
-    l++;
+    //words = realloc(words, (n + 1) * sizeof(char *));
+    //words[n] = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
+    strcpy(words[n], p_start);
+    n++;
   }
 
   free(line);
-  return l;
+  return n;
 }
 
 void replace(char *line, char *word, char hide) {
@@ -93,12 +69,11 @@ int main(int argc, char const *argv[]) {
   }
 
   // Import words
-  //char **words = (char **) malloc(8 * sizeof(char *));
-  char **words = NULL;
-  //char words[30][30];
+  //char **words = (char **) malloc(sizeof(char *));
+  char words[30][30];
   int l = 0;
   while (1) {
-    int n = parseLine(badfile, &words, l);
+    int n = parseLine(badfile, words, l);
     if (n == 0) break;
     l = n;
   }
@@ -106,21 +81,15 @@ int main(int argc, char const *argv[]) {
   fclose(badfile);
 
   // Replace word
-  int x;
   char line[MAX_LINE];
   while (fgets(line, MAX_LINE, src) != NULL) {
-    for (x = 0; x < l; x++) {
+    for (int x = 0; x < l; x++) {
       replace(line, words[x], argv[2][0]);
     }
 
     printf("%s", line);
   }
 
-  for (x = 0; x < l; x++) {
-    free(words[x]);
-  }
-
-  free(words);
   fclose(src);
   return 0;
 }

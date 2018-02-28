@@ -18,6 +18,11 @@ typedef struct {
 student parseLine(FILE *read, FILE *write) {
   student stu;
   char *line = (char *) malloc(MAX_LINE * sizeof(char));
+  if (line == NULL) {
+    printf("Memory allocation failed\n");
+    return stu;
+  }
+
   if (fgets(line, MAX_LINE, read) == NULL) {
     stu.number = -1;
     return stu;
@@ -36,10 +41,20 @@ student parseLine(FILE *read, FILE *write) {
         break;
       case 1:
         stu.id = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
+        if (stu.id == NULL) {
+          printf("Memory allocation failed\n");
+          return stu;
+        }
+
         strcpy(stu.id, p_start);
         break;
       case 2:
         stu.name = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
+        if (stu.name == NULL) {
+          printf("Memory allocation failed\n");
+          return stu;
+        }
+
         strcpy(stu.name, p_start);
         break;
     }
@@ -51,6 +66,11 @@ student parseLine(FILE *read, FILE *write) {
   // Do sth with the string p_start
   *(p_start + strlen(p_start) - 1) = '\0';
   stu.phone = (char *) malloc((strlen(p_start) + 1) * sizeof(char));
+  if (stu.phone == NULL) {
+    printf("Memory allocation failed\n");
+    return stu;
+  }
+
   strcpy(stu.phone, p_start);
 
   // Input mark
@@ -85,6 +105,10 @@ int main(int argc, char const *argv[]) {
   // Initial list
   int l = 0;
   student *list = (student *) malloc(sizeof(student));
+  if (list == NULL) {
+    printf("Memory allocation failed\n");
+    return 1;
+  }
 
   // Parse line in file to get data
   student temp;
@@ -99,6 +123,11 @@ int main(int argc, char const *argv[]) {
     // Increase length, realloc and add to list
     l++;
     list = (student *) realloc(list, l * sizeof(student));
+    if (stu.id == NULL) {
+      printf("Memory allocation failed\n");
+      return 1;
+    }
+
     list[l - 1] = temp;
   }
 

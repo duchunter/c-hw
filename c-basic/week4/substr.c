@@ -11,6 +11,12 @@ char *subStr(const char *str, int offset, int length) {
   if (length > remaining) length = remaining;
 
   char *sub = (char *) malloc(length * sizeof(char));
+  // Check if malloc failed
+  if (sub == NULL) {
+    printf("Memory allocation failed\n");
+    return 1;
+  }
+  
   strcpy(sub, str + offset);
   sub[length] = '\0';
 
