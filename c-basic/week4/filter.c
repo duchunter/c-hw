@@ -72,6 +72,7 @@ void replace(char *line, char *word, char hide) {
   }
 }
 
+
 int main(int argc, char const *argv[]) {
   // Check syntax
   if (argc != 3) {
