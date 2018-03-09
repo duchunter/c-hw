@@ -58,7 +58,7 @@ int main(int argc, char const *argv[]) {
   // Allocating memory for an array and a check intersection table
   circle *arr = (circle *) malloc(n * sizeof(circle));
   int **table = (int **) malloc(n * sizeof(int *));
-  if (arr = NULL || table == NULL) {
+  if (arr == NULL || table == NULL) {
     printf("Memory allocation failed\n");
     return 1;
   }
@@ -118,7 +118,7 @@ int main(int argc, char const *argv[]) {
       i + 1,
       arr[i].center.x,
       arr[i].center.y,
-      arr[i].radius,
+      arr[i].radius
     );
     if (arr[i].intersection > arr[max].intersection) max = i;
   }

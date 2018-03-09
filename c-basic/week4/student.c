@@ -123,8 +123,8 @@ int main(int argc, char const *argv[]) {
     // Increase length, realloc and add to list
     l++;
     list = (student *) realloc(list, l * sizeof(student));
-    if (stu.id == NULL) {
-      printf("Memory allocation failed\n");
+    if (list == NULL) {
+      printf("Memory reallocation failed\n");
       return 1;
     }
 
