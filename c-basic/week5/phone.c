@@ -161,7 +161,7 @@ void readDat() {
   printf("- Print n phones from the beginning of the list: n\n");
   printf("- print n phones from the end of the list: -n\n");
   printf("\nYour choice: ");
-  scanf("%d", &mode);
+  mode = mustBeInt();
   getchar();
 
   // Print all
@@ -223,6 +223,68 @@ void readDat() {
   fclose(f);
 }
 
+// Search
+void search(int byModel) {
+  int num, x, page;
+  char man[20], model[30];
+  if (byModel) {
+    printf("Model: ");
+    scanf("%[^\n]", model);
+  } else {
+    printf("Manufacturer: ");
+    scanf("%[^\n]", man);
+  }
+
+  getchar();
+
+  // Open file
+  FILE *f;
+  if ((f = fopen(DEST, "rb")) == NULL) {
+    printf("Cannot open %s\n", DEST);
+    return;
+  }
+
+  phone *list = (phone *) malloc(BLOCK * sizeof(phone));
+  if (list == NULL) {
+    printf("Memory allocation failed\n");
+    return;
+  }
+
+  while (!feof(f)){
+    num = fread(list, sizeof(phone), BLOCK, f);
+    for (x = 0; x < num; x++) {
+      if (byModel) {
+        if (strcmp(list[x].model, model) == 0) {
+          printf(
+            "%-30s\t%d GB\t%.2f\"\t%.d VND\n",
+            list[x].model, list[x].memory, list[x].size, list[x].price
+          );
+
+          break;
+        }
+      } else {
+        if (strstr(list[x].model, man) != NULL) {
+          printf(
+            "%-30s\t%d GB\t%.2f\"\t%.d VND\n",
+            list[x].model, list[x].memory, list[x].size, list[x].price
+          );
+
+          page++;
+          if (page >= PAGE) {
+            printf("(Press ENTER to see next page)\n");
+            getchar();
+            system("clear");
+            page = 0;
+          }
+        }
+      }
+    }
+  }
+
+  free(list);
+  fclose(f);
+}
+
 
 // MAIN
 int main(int argc, char const *argv[]) {
@@ -266,7 +328,7 @@ int main(int argc, char const *argv[]) {
       case 3:
         system("clear");
         printf("\tPrint all phones of a manufacturer\n\n");
-
+        search(0);
         //Done
         wait();
         break;
@@ -275,7 +337,7 @@ int main(int argc, char const *argv[]) {
       case 4:
         system("clear");
         printf("\tSearch phone\n\n");
-
+        search(1);
         //Done
         wait();
         break;
