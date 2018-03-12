@@ -75,3 +75,15 @@ w4-student    read a student list from a file, dynamically added to an array,
 w4-filter     read words from a file and dynamically add to an array,
               read a file, replace all negative word by special char
               print new content to the screen
+
+
+w5-tt-1       copy file using block style
+w5-tt-2       phone book block style
+w5-tt-3       locate and update data in specific index in a file
+w5-tt-4       create file's header
+w5-copy       menu copy file using char style, line style and blockstyle
+w5-student    convert student grade.txt to .dat, display data in .dat,
+              search student by id, change mark and write back to .dat
+w5-phone      convert phone.txt to .dat, read from .dat (read all or part) with
+              page mode, read all phone of a manufacturer, search phone by model
+w5-dict       convert dict.txt to .dat, read part of .dict by start and end
