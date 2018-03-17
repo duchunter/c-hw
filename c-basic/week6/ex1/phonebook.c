@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define OUTPUT "phone.dat"
+
 typedef struct {
     char name[20];
     char tel[11];
@@ -86,9 +88,23 @@ void delList(node *cur) {
     free(cur);
 }
 
+void exportList() {
+  FILE *f;
+  if ((f = fopen(OUTPUT, "w+b")) == NULL) {
+    printf("Cannot open %s\n", OUTPUT);
+    return;
+  }
+
+  node *cur;
+  for (cur = root; cur != NULL; cur = cur->next) {
+    fwrite(cur, sizeof(address), 1, f);
+  }
+
+  fclose(f);
+}
+
 int main(int argc, char *argv[]) {
     int n, x;
-    addBefore();
     printf("How many phone address do you want to add?: ");
     scanf("%d", &n);
     getchar();
@@ -97,12 +113,13 @@ int main(int argc, char *argv[]) {
         printf("- Address %d:\n", x + 1);
         addAfter(newNode());
     }
-
+    /*
     addHead();
     addAfter(newNode());
     addBefore();
-
+    */
     printList(root);
+    exportList();
 
     delList(root);
     return 0;
