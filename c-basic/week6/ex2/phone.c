@@ -116,6 +116,15 @@ void exportList() {
   fclose(f);
 }
 
+void delList() {
+    for (node *cur = root; cur != NULL; cur = cur-> next) {
+      free(cur);
+    }
+
+    root = NULL;
+    now = NULL;
+}
+
                     // OTHER FUNCTIONS
 
 // Readfile text by line
@@ -312,6 +321,7 @@ int main(int argc, char const *argv[]) {
   } while(choice != 0);
 
   //Everything done
+  delList();
   system("clear");
   return 0;
 }
