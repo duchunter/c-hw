@@ -87,3 +87,22 @@ w5-student    convert student grade.txt to .dat, display data in .dat,
 w5-phone      convert phone.txt to .dat, read from .dat (read all or part) with
               page mode, read all phone of a manufacturer, search phone by model
 w5-dict       convert dict.txt to .dat, read part of .dict by start and end
+
+
+
+w6-ex1-merge    merge 2 files
+w6-ex1-read     read .dat file
+w6-ex1-split    split to 2 files based on input index
+w6-ex1-phone..  phonebook used to create phone.dat, others are testing result
+
+w6-ex2-phone    menu
+                1 = import data from text file to linked list, parse by line
+                2 = import from .dat, parse block
+                3 = display list
+                4 = search list by model
+                5 = search by price below
+                6 = export list to .dat file
+
+w6-ex3-phonebook  featuring add after and add before
+w6-ex4-list       contain everything about linked list, featuring insert at
+                  index and del at index
