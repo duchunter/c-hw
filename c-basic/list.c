@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define TARGET "phone.dat"
 #define PAGE 25
@@ -40,7 +41,7 @@ address getAddr() {
 }
 
 // Moving
-void movePtr(int i) {
+void movePtrByIndex(int i) {
   if (root == NULL) return;
   prev = root;
   now = root;
@@ -49,6 +50,15 @@ void movePtr(int i) {
     now = now->next;
     if (prev->next != now) prev = prev->next;
   }
+}
+
+void movePtrByData(char *email) {
+    if (root == NULL) return;
+    prev = root;
+    for (now = root; now != NULL; now = now->next) {
+        if (strcmp(now->addr.email, email) == 0) break;
+        prev = now;
+    }
 }
 
 // Adding
@@ -109,7 +119,7 @@ void insertAt(int i) {
   if (i == 0) {
     addHead(newNode(getAddr()));
   } else {
-    movePtr(i - 1);
+    movePtrByIndex(i - 1);
     addAfter(newNode(getAddr()));
   }
 }
@@ -164,8 +174,38 @@ void delAt(int i) {
     return;
   }
 
-  movePtr(i);
+  movePtrByIndex(i);
   delNode();
+}
+
+void delByData() {
+    char email[25];
+    printf("Enter email: ");
+    scanf("%[^\n]", email);
+    getchar();
+    movePtrByData(email);
+    if (now == NULL) {
+        printf("No data found\n");
+        now = root;
+        prev = root;
+    } else {
+        delNode();
+    }
+}
+
+// Sorting and mixin
+void *reverseList() {
+    node *cur, *before;
+    cur = before = NULL;
+    while (root != NULL) {
+        cur = root;
+        root = root->next;
+        cur->next = before;
+        before = cur;
+    }
+
+    root = before;
+    printf("Done\n");
 }
 
 
@@ -210,8 +250,8 @@ int main(int argc, char *argv[]) {
   do {
     system("clear");
     printf("\tChoose your action:\n\n");
-    printf("1. Print list\n2. Insert at\n3. Delete at\n");
-    printf("\n0. Exit\n\nYour choice: ");
+    printf("1. Print list\n2. Insert at\n3. Delete at\n4. Reverse list\n");
+    printf("5. Del by data\n\n0. Exit\n\nYour choice: ");
     scanf("%d", &choice);
     getchar();
     switch (choice) {
@@ -234,6 +274,16 @@ int main(int argc, char *argv[]) {
         scanf("%d", &i);
         getchar();
         delAt(i);
+        wait();
+        break;
+      case 4:
+        system("clear");
+        reverseList();
+        wait();
+        break;
+      case 5:
+        system("clear");
+        delByData();
         wait();
         break;
     }
