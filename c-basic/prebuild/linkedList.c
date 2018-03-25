@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TARGET "phone.dat"
+#define TEXT "phone.txt"
+#define DAT "phone.dat"
+#define OUTPUT "phoneDB.dat"
+#define MAX_LINE 80
+#define DIV '|'
+#define BLOCK 10
 #define PAGE 25
 
 // Supporting functions
@@ -13,9 +18,10 @@ void wait() {
 
 // Initial data
 typedef struct {
-  char name[20];
-  char tel[11];
-  char email[25];
+  char model[30];
+  int memory;
+  float size;
+  int price;
 } element;
 
 typedef struct node {
@@ -29,16 +35,16 @@ typedef struct {
   node *prev;
 } linkedList;
 
-element getAddr() {
+element getData() {
   element data;
-  printf("Name: ");
-  scanf("%[^\n]", data.name);
-  printf("Tel: ");
-  getchar();
-  scanf("%[^\n]", data.tel);
-  printf("Email: ");
-  getchar();
-  scanf("%[^\n]", data.email);
+  printf("Model: ");
+  scanf("%[^\n]", data.model);
+  printf("Memory: ");
+  scanf("%d", &data.memory);
+  printf("Size: ");
+  scanf("%f", &data.size);
+  printf("Price: ");
+  scanf("%d", &data.price);
   getchar();
   return data;
 }
@@ -59,7 +65,7 @@ void movePtrByIndex(int i, linkedList *list) {
   }
 }
 
-void movePtrByData(char *email, linkedList *list) {
+void movePtrByData(char *model, linkedList *list) {
   node **root = &list->root;
   node **now = &list->now;
   node **prev = &list->prev;
@@ -67,7 +73,7 @@ void movePtrByData(char *email, linkedList *list) {
   if (*root == NULL) return;
   *prev = *root;
   for (*now = *root; *now != NULL; *now = (*now)->next) {
-      if (strcmp((*now)->data.email, email) == 0) break;
+      if (strcmp((*now)->data.model, model) == 0) break;
       *prev = *now;
   }
 }
@@ -140,17 +146,18 @@ void insertAt(int i, linkedList *list) {
   }
 
   if (i == 0) {
-    addHead(newNode(getAddr()), list);
+    addHead(newNode(getData()), list);
   } else {
     movePtrByIndex(i - 1, list);
-    addAfter(newNode(getAddr()), list);
+    addAfter(newNode(getData()), list);
   }
 }
 
 // Printing
 void printNode(node *cur) {
   printf(
-    "%-21s%-12s%-26s\n", cur->data.name, cur->data.tel, cur->data.email
+    "%-30s\t%d GB\t%.2f\"\t%.d VND\n",
+    cur->data.model, cur->data.memory, cur->data.size, cur->data.price
   );
 }
 
@@ -175,12 +182,12 @@ void printNodeByData(linkedList *list) {
   node **now = &list->now;
   node **prev = &list->prev;
 
-  char email[25];
-  printf("Enter email: ");
-  scanf("%[^\n]", email);
+  char model[30];
+  printf("Enter model: ");
+  scanf("%[^\n]", model);
   getchar();
 
-  movePtrByData(email, list);
+  movePtrByData(model, list);
   if (*now == NULL) {
       printf("No data found\n");
       *now = *root;
@@ -241,12 +248,12 @@ void delByData(linkedList *list) {
   node **now = &list->now;
   node **prev = &list->prev;
 
-  char email[25];
-  printf("Enter email: ");
-  scanf("%[^\n]", email);
+  char model[30];
+  printf("Enter model: ");
+  scanf("%[^\n]", model);
   getchar();
 
-  movePtrByData(email, list);
+  movePtrByData(model, list);
   if (*now == NULL) {
       printf("No data found\n");
       *now = *root;
@@ -277,6 +284,77 @@ void *reverseList(linkedList *list) {
 
 
 // File
+element parseLine(FILE *read) {
+  element data;
+  char *line = (char *) malloc(MAX_LINE * sizeof(char));
+  if (line == NULL) {
+    printf("Memory allocation failed\n");
+    data.price = -1;
+    return data;
+  }
+
+  if (fgets(line, MAX_LINE, read) == NULL) {
+    data.price = -1;
+    return data;
+  }
+
+  int l = 0;
+  char *p_start = line;
+  char *p_end = NULL;
+  while ((p_end = strchr(p_start, DIV)) != NULL) {
+    *p_end = '\0';
+
+    // Do sth with the string p_start
+    switch (l) {
+      case 0:
+        strcpy(data.model, p_start);
+        break;
+      case 1:
+        data.memory = atoi(p_start);
+        break;
+      case 2:
+        data.size = atof(p_start);
+        break;
+    }
+
+    l++;
+    p_start = p_end + 1;
+  }
+
+  // Do sth with the string p_start
+  *(p_start + strlen(p_start) - 1) = '\0';
+  data.price = atoi(p_start);
+
+  // Done
+  free(line);
+  return data;
+}
+
+void importTextList(char *filename, linkedList *list) {
+  FILE *f;
+  if ((f = fopen(filename, "r")) == NULL) {
+    printf("Cannot open %s\n", filename);
+    return;
+  }
+
+  // Parse line in file to get data
+  element temp;
+  while (1) {
+    temp = parseLine(f);
+
+    // Break if end of file
+    if (temp.price == -1) {
+      break;
+    }
+
+    // Add to list
+    addHead(newNode(temp), list);
+  }
+
+  printf("Done\n");
+  fclose(f);
+}
+
 void importDatList(char *filename, linkedList *list) {
   FILE *f;
   if ((f = fopen(filename, "rb")) == NULL) {
@@ -321,7 +399,12 @@ void exportTextList(char *filename, linkedList *list) {
 
   node *cur;
   for (cur = *root; cur != NULL; cur = cur->next) {
-    fprintf(f, "%s\t%s\t%s\n", cur->data.name, cur->data.tel, cur->data.email);
+    fprintf(
+      f,
+      "%s%c%d%c%.1f%c%d\n",
+      cur->data.model, DIV, cur->data.memory, DIV,
+      cur->data.size, DIV, cur->data.price
+    );
   }
 
   fclose(f);
@@ -368,48 +451,96 @@ int main(int argc, char *argv[]) {
   linkedList list;
   list.root = list.now = list.prev = NULL;
 
-  importDatList(TARGET, &list);
   int choice, i;
   do {
     system("clear");
     printf("\tChoose your action:\n\n");
-    printf("1. Print list\n2. Insert at\n3. Delete at\n4. Reverse list\n");
-    printf("5. Del by data\n6. Split list\n0. Exit\n\nYour choice: ");
+    printf("1. Import from dat (after)\n");
+    printf("2. Print list\n3. Add new phone (before/after)\n");
+    printf("4. Add at index\n5. Delete at index\n");
+    printf("6. Delete current node\n7. Delete first node\n");
+    printf("8. Search and update\n9. Split and export\n");
+    printf("10. Reverse list\n11. Save to file\n");
+
+    printf("\n0. Exit\n\nYour choice: ");
     scanf("%d", &choice);
     getchar();
     switch (choice) {
       case 1:
         system("clear");
-        printList(&list);
+        importDatList("phoneDB.dat", &list);
         wait();
         break;
       case 2:
         system("clear");
-        printf("Index: ");
+        printList(&list);
+        wait();
+        break;
+      case 3:
+        system("clear");
+        printf("Where do you want to add?\n1. Before\n2. After\n");
+        printf("\nYour choice: ");
+        scanf("%d", &i);
+        getchar();
+        if (i == 1) {
+          addBefore(newNode(getData()), &list);
+        } else if (i == 2) {
+          addAfter(newNode(getData()), &list);
+        }
+        else {
+          printf("Invalid\n");
+        }
+
+        printf("Done\n");
+        wait();
+        break;
+      case 4:
+        system("clear");
+        printf("Enter index: ");
         scanf("%d", &i);
         getchar();
         insertAt(i, &list);
         wait();
         break;
-      case 3:
+      case 5:
         system("clear");
-        printf("Index: ");
+        printf("Enter index: ");
         scanf("%d", &i);
         getchar();
         delAt(i, &list);
         wait();
         break;
-      case 4:
-        system("clear");
-        reverseList(&list);
-        wait();
-        break;
-      case 5:
-        system("clear");
-        delByData(&list);
-        wait();
-        break;
       case 6:
+        system("clear");
+        delNode(&list);
+        printf("Done\n");
+        wait();
+        break;
+      case 7:
+        system("clear");
+        delHead(&list);
+        printf("Done\n");
+        wait();
+        break;
+      case 8:
+        system("clear");
+        char model[30];
+        printf("Enter model: ");
+        scanf("%[^\n]", model);
+        getchar();
+        movePtrByData(model, &list);
+        if (list.now == NULL) {
+          printf("No model found\n");
+        } else {
+          printf("Enter new data:\n");
+          element new = getData();
+          list.now->data = new;
+          printf("Done\n");
+        }
+
+        wait();
+        break;
+      case 9:
         system("clear");
         int n1, n2;
         printf("Enter starting index: ");
@@ -419,11 +550,22 @@ int main(int argc, char *argv[]) {
         scanf("%d", &n2);
         getchar();
         splitList(n1, n2, &list);
+        break;
+      case 10:
+        system("clear");
+        reverseList(&list);
+        wait();
+        break;
+      case 11:
+        system("clear");
+        exportDatList(OUTPUT, &list);
+        printf("Done\n");
+        wait();
+        break;
     }
   } while (choice != 0);
 
   system("clear");
-  //exportDatList(TARGET, &list);
   delList(&list);
   return 0;
 }

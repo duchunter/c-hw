@@ -106,3 +106,6 @@ w6-ex2-phone    menu
 w6-ex3-phonebook  featuring add after and add before
 w6-ex4-list       contain everything about linked list, featuring insert at
                   index and del at index
+
+w7-list           featuring split list, now all functions about linked list are
+                  moved to /prebuild
