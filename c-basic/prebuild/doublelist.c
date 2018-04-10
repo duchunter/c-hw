@@ -76,22 +76,6 @@ void insertAfter(node *new, doublelist *list) {
     }
 }
 
-void insertBefore(node *new, doublelist *list) {
-    node **root = &list->root;
-    node **now = &list->now;
-
-    if (*root == NULL) {
-        *root = new;
-        *now = *root;
-    } else {
-        new->next = *now;
-        new->prev = (*now)->prev;
-        if ((*now)->prev != NULL) (*now)->prev->next = new;
-        (*now)->prev = new;
-        *now = (*now)->prev;
-    }
-}
-
 void insertAtHead(node *new, doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
@@ -102,6 +86,26 @@ void insertAtHead(node *new, doublelist *list) {
     } else {
         new->next = *root;
         (*root)->prev = new;
+        *root = new;
+    }
+}
+
+void insertBefore(node *new, doublelist *list) {
+    node **root = &list->root;
+    node **now = &list->now;
+
+    if (*root == NULL) {
+        *root = new;
+        *now = *root;
+    } else if (*now == *root) {
+        insertAtHead(new, list);
+        *now = *root;
+    } else {
+        new->next = *now;
+        new->prev = (*now)->prev;
+        if ((*now)->prev != NULL) (*now)->prev->next = new;
+        (*now)->prev = new;
+        *now = (*now)->prev;
     }
 }
 
@@ -206,7 +210,41 @@ int main(int argc, char *argv[]) {
             insertAfter(newNode(newElement()), &list);
             wait();
             break;
-
+        case 3:
+            system("clear");
+            insertBefore(newNode(newElement()), &list);
+            wait();
+            break;
+        case 4:
+            system("clear");
+            insertAtHead(newNode(newElement()), &list);
+            wait();
+            break;
+        case 5:
+            system("clear");
+            insertAtTail(newNode(newElement()), &list);
+            wait();
+            break;
+        case 6:
+            system("clear");
+            insertByIndex(&list);
+            wait();
+            break;
+        case 7:
+            system("clear");
+            deleteFirst(&list);
+            wait();
+            break;
+        case 8:
+            system("clear");
+            deleteNode(&list);
+            wait();
+            break;
+        case 9:
+            system("clear");
+            deleteList(&list);
+            wait();
+            break;
         case 10:
             system("clear");
             printList(&list);

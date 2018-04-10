@@ -1,0 +1,1 @@
+linked list: deleting - if nothing to delete, return something
