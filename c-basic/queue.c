@@ -19,10 +19,9 @@ int isEmpty(queue *q) {
 }
 
 int isFull(queue *q) {
-    if (isEmpty) return 0;
+    if (isEmpty(q)) return 0;
     int a = q->front;
     int b = q->rear;
-    printf("qwev %d - %d\n", a, b);
     if (b == MAX - 1) {
         return a == 0;
     } else {
@@ -84,7 +83,6 @@ int main(int argc, char *argv[]) {
         printf("Enqueue: %d\n", enqueue(x, &q));
     }
 
-    printf("\n%d - %d\n", q.front, q.rear);
     printf("isEmpty return: %d\n", isEmpty(&q));
     printf("isFull return: %d\n\n", isFull(&q));
 

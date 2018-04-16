@@ -4,25 +4,25 @@
 #include <ctype.h>
 #include "./numstack.h"
 
-#define MAX 40
+#define MAX 30
 
 // MAIN
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Invalid syntax, should be ./infix_to_postfix expression\n");
-        return -1;
-    }
+    char input[MAX];
+    printf("Enter expression: ");
+    scanf("%[^\n]", input);
+    getchar();
 
     linkedList stack;
     stack.root = stack.now = stack.prev = NULL;
 
     int x, l = 0, flag = 1;
-    char ch, output[MAX];
-    for (x = 0; x < strlen(argv[1]); x++) {
-        ch = argv[1][x];
+    char ch, output[MAX + 10];
+    for (x = 0; x < strlen(input); x++) {
+        ch = input[x];
         if (isdigit(ch)) {
             output[l++] = ch;
-            if (!isdigit(argv[1][x + 1])) {
+            if (!isdigit(input[x + 1])) {
               output[l++] = ' ';
             }
 
@@ -31,14 +31,28 @@ int main(int argc, char *argv[]) {
         }
 
         if (ch == '+' || ch == '-' || ch == 'x' || ch == '/') {
-            if (l != 0 && (isEmpty(&stack) || (top(&stack) == '(') && isdigit(output[l - 2]))) {
+            if (
+              l != 0
+              && (
+                isEmpty(&stack)
+                || (
+                  top(&stack) == '(')
+                  && flag == 0
+                )
+              ) {
                 push(ch, &stack);
                 flag = 1;
                 continue;
             }
 
             if (ch == '+' || ch == '-') {
-                if (flag == 1) {
+                if (
+                  flag == 1
+                  && (
+                    input[x + 1] != '('
+                    || input[x - 1] == '('
+                  )
+                ) {
                   output[l++] = ch;
                   continue;
                 }
@@ -87,6 +101,7 @@ int main(int argc, char *argv[]) {
             }
 
             pop(&stack);
+            flag = 0;
             continue;
         }
 

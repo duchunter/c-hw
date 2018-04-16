@@ -5,19 +5,11 @@
 #include "./numstack.h"
 
 int getValue(int *a, int *b, linkedList *stack) {
-    if (isEmpty(stack)) {
-        printf("Invalid expression\n");
-        return 0;
-    } else {
-        *a = pop(stack);
-    }
+    if (isEmpty(stack)) return -1;
+    *a = pop(stack);
 
-    if (isEmpty(stack)) {
-        printf("Invalid expression\n");
-        return 0;
-    } else {
-        *b = pop(stack);
-    }
+    if (isEmpty(stack)) return 0;
+    *b = pop(stack);
 
     return 1;
 }
@@ -55,30 +47,37 @@ int main(int argc, char *argv[]) {
       } else {
           switch (ch) {
           case '+':
-              if (getValue(&a, &b, &stack)) {
+              if (getValue(&a, &b, &stack) == 1) {
                   push(a + b, &stack);
               } else {
+                printf("Invalid expression\n");
                 return -1;
               }
               break;
           case '-':
-              if (getValue(&a, &b, &stack)) {
-                  push(a - b, &stack);
+              y = getValue(&a, &b, &stack);
+              if (y == 1) {
+                  push(b - a, &stack);
+              } else if (y == 0) {
+                  push(0 - a, &stack);
               } else {
+                printf("Invalid expression\n");
                 return -1;
               }
               break;
           case 'x':
-              if (getValue(&a, &b, &stack)) {
+              if (getValue(&a, &b, &stack) == 1) {
                   push(a * b, &stack);
               } else {
+                printf("Invalid expression\n");
                 return -1;
               }
               break;
           case '/':
-              if (getValue(&a, &b, &stack)) {
+              if (getValue(&a, &b, &stack) == 1) {
                   push(b / a, &stack);
               } else {
+                printf("Invalid expression\n");
                 return -1;
               }
               break;
