@@ -21,6 +21,7 @@ typedef struct node {
 
 typedef struct {
     node *root;
+    node *tail;
     node *now;
 } doublelist;
 
@@ -31,16 +32,20 @@ int isEmpty(doublelist *list) {
 void movePtrByIndex(int index, doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
     if (index < 0) {
-        printf("Index must be greater than 0");
-        return;
-    }
-
-    *now = *root;
-    for (int x = 0; x < index; x++) {
-        *now = (*now)->next;
-        if ((*now)->next == NULL) break;
+      *now = *tail;
+      for (int x = -1; x > index; x--) {
+          *now = (*now)->prev;
+          if ((*now)->prev == NULL) break;
+      }
+    } else {
+      *now = *root;
+      for (int x = 0; x < index; x++) {
+          *now = (*now)->next;
+          if ((*now)->next == NULL) break;
+      }
     }
 }
 
@@ -60,29 +65,31 @@ node *newNode(element data) {
     return new;
 }
 
-void insertAfter(node *new, doublelist *list) {
+void insertAtTail(node *new, doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
     if (*root == NULL) {
         *root = new;
         *now = *root;
+        *tail = *root;
     } else {
-        new->next = (*now)->next;
-        new->prev = *now;
-        if ((*now)->next != NULL) (*now)->next->prev = new;
-        (*now)->next = new;
-        *now = (*now)->next;
+        (*tail)->next = new;
+        new->prev = *tail;
+        *tail = new;
     }
 }
 
 void insertAtHead(node *new, doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
     if (*root == NULL) {
         *root = new;
         *now = *root;
+        *tail = *root;
     } else {
         new->next = *root;
         (*root)->prev = new;
@@ -90,43 +97,52 @@ void insertAtHead(node *new, doublelist *list) {
     }
 }
 
-void insertBefore(node *new, doublelist *list) {
+void insertAfter(node *new, doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
     if (*root == NULL) {
         *root = new;
         *now = *root;
+        *tail = *root;
+    } else if (*now == *tail) {
+        insertAtTail(new, list);
+        *now = *tail;
+    } else {
+        new->next = (*now)->next;
+        new->prev = *now;
+        (*now)->next->prev = new;
+        (*now)->next = new;
+        *now = (*now)->next;
+    }
+}
+
+void insertBefore(node *new, doublelist *list) {
+    node **root = &list->root;
+    node **now = &list->now;
+    node **tail = &list->tail;
+
+    if (*root == NULL) {
+        *root = new;
+        *now = *root;
+        *tail = *root;
     } else if (*now == *root) {
         insertAtHead(new, list);
         *now = *root;
     } else {
         new->next = *now;
         new->prev = (*now)->prev;
-        if ((*now)->prev != NULL) (*now)->prev->next = new;
+        (*now)->prev->next = new;
         (*now)->prev = new;
         *now = (*now)->prev;
-    }
-}
-
-void insertAtTail(node *new, doublelist *list) {
-    node **root = &list->root;
-    node **now = &list->now;
-
-    if (*root == NULL) {
-        *root = new;
-        *now = *root;
-    } else {
-        node *temp;
-        for (temp = *root; temp->next != NULL; temp = temp->next);
-        temp->next = new;
-        new->prev = temp;
     }
 }
 
 void insertByIndex(doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
     int index;
     printf("Enter index: ");
@@ -134,7 +150,8 @@ void insertByIndex(doublelist *list) {
     if (index == 0) {
         insertAtHead(newNode(newElement()), list);
     } else {
-        movePtrByIndex(index - 1, list);
+        if (index > 0) { index -= 1; }
+        movePtrByIndex(index, list);
         insertAfter(newNode(newElement()), list);
     }
 }
@@ -142,13 +159,23 @@ void insertByIndex(doublelist *list) {
 void deleteNode(doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
-    if (*now == *root) {
+    if (*now == *root && *now == *tail) {
+      *root = *tail = NULL;
+      free(*now);
+    } else if (*now == *root) {
         *root = (*root)->next;
+        free(*now);
+    } else if (*now == *tail) {
+        *tail = (*tail)->prev;
         free(*now);
     } else {
         (*now)->prev->next = (*now)->next;
-        if ((*now)->next != NULL) (*now)->next->prev = (*now)->prev;
+        if ((*now)->next != NULL) {
+          (*now)->next->prev = (*now)->prev;
+        }
+
         free(*now);
     }
 
@@ -157,6 +184,11 @@ void deleteNode(doublelist *list) {
 
 void deleteFirst(doublelist *list) {
     movePtrByIndex(0, list);
+    deleteNode(list);
+}
+
+void deleteLast(doublelist *list) {
+    movePtrByIndex(-1, list);
     deleteNode(list);
 }
 
@@ -171,7 +203,7 @@ void printNode(node *cur) {
     printf("%d\n", cur->data.val);
 }
 
-void printList(doublelist *list) {
+void printListFromRoot(doublelist *list) {
     node **root = &list->root;
     int page = 0;
     for (node *cur = *root; cur != NULL; cur = cur->next) {
@@ -186,9 +218,24 @@ void printList(doublelist *list) {
     }
 }
 
+void printListFromTail(doublelist *list) {
+    node **tail = &list->tail;
+    int page = 0;
+    for (node *cur = *tail; cur != NULL; cur = cur->prev) {
+        printNode(cur);
+        page++;
+        if (page >= PAGE) {
+            printf("\n(Press ENTER to see next page)\n");
+            getchar();
+            system("clear");
+            page = 0;
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     doublelist list;
-    list.root = list.now = NULL;
+    list.root = list.now = list->tail = NULL;
     int choice, i;
     do {
         system("clear");
@@ -247,7 +294,7 @@ int main(int argc, char *argv[]) {
             break;
         case 10:
             system("clear");
-            printList(&list);
+            printListFromRoot(&list);
             wait();
             break;
         }

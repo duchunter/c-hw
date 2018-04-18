@@ -37,6 +37,7 @@ int enqueue(int data, queue *q) {
 
     if (isEmpty(q)) {
         q->front = q->rear = 0;
+        q->data[0] = data;
     } else {
         if (q->rear == MAX - 1) {
             q->rear = 0;

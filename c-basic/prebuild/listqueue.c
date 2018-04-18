@@ -13,6 +13,7 @@ typedef struct node {
 
 typedef struct {
     node *root;
+    node *tail;
     node *now;
 } doublelist;
 
@@ -23,16 +24,20 @@ int isEmpty(doublelist *list) {
 void movePtrByIndex(int index, doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
     if (index < 0) {
-        printf("Index must be greater than 0");
-        return;
-    }
-
-    *now = *root;
-    for (int x = 0; x < index; x++) {
-        *now = (*now)->next;
-        if ((*now)->next == NULL) break;
+      *now = *tail;
+      for (int x = -1; x > index; x--) {
+          *now = (*now)->prev;
+          if ((*now)->prev == NULL) break;
+      }
+    } else {
+      *now = *root;
+      for (int x = 0; x < index; x++) {
+          *now = (*now)->next;
+          if ((*now)->next == NULL) break;
+      }
     }
 }
 
@@ -55,28 +60,39 @@ node *newNode(element data) {
 void insertAtTail(node *new, doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
     if (*root == NULL) {
         *root = new;
         *now = *root;
+        *tail = *root;
     } else {
-        node *temp;
-        for (temp = *root; temp->next != NULL; temp = temp->next);
-        temp->next = new;
-        new->prev = temp;
+        (*tail)->next = new;
+        new->prev = *tail;
+        *tail = new;
     }
 }
 
 void deleteNode(doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
+    node **tail = &list->tail;
 
-    if (*now == *root) {
+    if (*now == *root && *now == *tail) {
+      *root = *tail = NULL;
+      free(*now);
+    } else if (*now == *root) {
         *root = (*root)->next;
+        free(*now);
+    } else if (*now == *tail) {
+        *tail = (*tail)->prev;
         free(*now);
     } else {
         (*now)->prev->next = (*now)->next;
-        if ((*now)->next != NULL) (*now)->next->prev = (*now)->prev;
+        if ((*now)->next != NULL) {
+          (*now)->next->prev = (*now)->prev;
+        }
+
         free(*now);
     }
 
@@ -107,9 +123,17 @@ int dequeue(doublelist *q) {
     return deleteFirst(q).val;
 }
 
+element head(doublelist *q) {
+  return q->root->data;
+}
+
+element tail(doublelist *q) {
+  return q->tail->data;
+}
+
 int main(int argc, char *argv[]) {
     doublelist queue;
-    queue.now = queue.root = NULL;
+    queue.now = queue.root = queue.tail = NULL;
 
     int x;
     for (x = 0; x < 10; x++) {
