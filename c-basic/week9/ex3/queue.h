@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 15;
-
 typedef struct {
     int wait;
 } element;
@@ -56,7 +54,7 @@ void movePtrByIndex(int index, doublelist *list) {
 
 element newElement(int wait) {
     element data;
-    data.wait = MAX + wait;
+    data.wait = wait;
     return data;
 }
 

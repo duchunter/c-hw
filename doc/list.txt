@@ -112,3 +112,16 @@ w7-list           featuring split list, now all functions about linked list are
 
 w8-bignum         perform addition and subtraction with big number using stack
 w8-undo           undo action using stack
+
+w9-ex1            change math expression from infix to postfix, parse postfix
+                  and output result, using queue
+w9-ex2            os simulator, init by input number of concurrent process and
+                  max memory, create new process with id and memory require. If
+                  Remaining memory is available, execute it, if not, put it in
+                  a queue and wait. Terminate process using kill function to
+                  free memory, using queue
+w9-ex3            bank simulator, init by input number of tables, input time and
+                  number of customers, push them in a corresponding queue
+                  (lowest) wait time, count waiting customers and total wait
+                  time, time change -> wait time change, using not only queue
+                  but also double list traverse

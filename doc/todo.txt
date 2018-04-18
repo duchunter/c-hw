@@ -1,2 +1,1 @@
 linked list: deleting - if nothing to delete, return something
-double linked list: add tail
