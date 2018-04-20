@@ -1,1 +1,3 @@
 linked list: deleting - if nothing to delete, return something
+all structure: work with phone db
+phoneDB.dat fucked up somehow
