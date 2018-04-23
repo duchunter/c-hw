@@ -10,7 +10,10 @@ void wait() {
 }
 
 typedef struct {
-    int val;
+    char model[30];
+    int memory;
+    float size;
+    int price;
 } element;
 
 typedef struct node {
@@ -51,8 +54,14 @@ void movePtrByIndex(int index, doublelist *list) {
 
 element newElement() {
     element data;
-    printf("Value: ");
-    scanf("%d", &data.val);
+    printf("Model: ");
+    scanf("%[^\n]", data.model);
+    printf("Memory: ");
+    scanf("%d", &data.memory);
+    printf("Size: ");
+    scanf("%f", &data.size);
+    printf("Price: ");
+    scanf("%d", &data.price);
     getchar();
     return data;
 }
@@ -200,7 +209,10 @@ void deleteList(doublelist *list) {
 }
 
 void printNode(node *cur) {
-    printf("%d\n", cur->data.val);
+    printf(
+        "%-30s\t%d GB\t%.2f\"\t%.d VND\n",
+        cur->data.model, cur->data.memory, cur->data.size, cur->data.price
+        );
 }
 
 void printListFromRoot(doublelist *list) {
@@ -233,6 +245,39 @@ void printListFromTail(doublelist *list) {
     }
 }
 
+void importDatList(char *filename, doublelist *list) {
+    FILE *f;
+    if ((f = fopen(filename, "rb")) == NULL) {
+        printf("Cannot open %s\n", filename);
+        return;
+    }
+
+    element data[1];
+    while (!feof(f)) {
+        int n = fread(data, sizeof(element), 1, f);
+        if (n != 0) insertAfter(newNode(data[0]), list);
+    }
+
+    fclose(f);
+}
+
+void printList(doublelist *list) {
+    node **root = &list->root;
+
+    int page = 0;
+    for (node *cur = *root; cur != NULL; cur = cur->next) {
+        printNode(cur);
+        page++;
+        if (page >= PAGE) {
+            printf("\n(Press ENTER to see next page)\n");
+            getchar();
+            system("clear");
+            page = 0;
+        }
+    }
+}
+
+/*
 int main(int argc, char *argv[]) {
     doublelist list;
     list.root = list.now = list->tail = NULL;
@@ -304,3 +349,4 @@ int main(int argc, char *argv[]) {
     deleteList(&list);
     return 0;
 }
+*/

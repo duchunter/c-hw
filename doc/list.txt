@@ -120,8 +120,19 @@ w9-ex2            os simulator, init by input number of concurrent process and
                   Remaining memory is available, execute it, if not, put it in
                   a queue and wait. Terminate process using kill function to
                   free memory, using queue
-w9-ex3            bank simulator, init by input number of tables, input time and
-                  number of customers, push them in a corresponding queue
+w9-ex3            bank simulator, init by input number of tables, input time
+                  and number of customers, push them in a corresponding queue
                   (lowest) wait time, count waiting customers and total wait
                   time, time change -> wait time change, using not only queue
                   but also double list traverse
+
+w10-onclass       binary search with number, sentinel search using double list
+                  self organize search (move to front, transpose) using single
+                  list, test with phone.dat
+
+w10-ex2-convert   convert wordlist.txt -> .dat to move file pointer easily
+w10-ex2-look      binary search a word in wordlist, print all relevant words
+w10-ex3-compare   compare list1 and list2, print all what in list1 but not
+                  in list2 and vice versa, if have same key -> check other val
+                  if different -> print. Method: sort both list by key first
+                  using bubble sort, and then compare

@@ -1,0 +1,6 @@
+4-danger
+7-computer
+1-apple
+2-ball
+11-iphone
+3-camera

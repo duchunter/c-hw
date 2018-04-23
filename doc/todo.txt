@@ -1,3 +1,5 @@
 linked list: deleting - if nothing to delete, return something
 all structure: work with phone db
-phoneDB.dat fucked up somehow
+phoneDB.dat fucked up somehow -> make new one from phone.txt
+w10-ex3 test data to simple -> add more
+update parseline in prebuild

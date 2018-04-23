@@ -1,0 +1,6 @@
+10-danger
+7-computer
+1-apple
+16-ball
+11-nokia
+20-camera
