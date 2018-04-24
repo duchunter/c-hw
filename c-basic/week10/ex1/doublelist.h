@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 #define PAGE 25
+#define MAX_LINE 80
+#define DIV '|'
 
 // Supporting functions
 void wait() {
@@ -14,6 +17,7 @@ typedef struct {
     int memory;
     float size;
     int price;
+    int count;
 } element;
 
 typedef struct node {
@@ -52,6 +56,16 @@ void movePtrByIndex(int index, doublelist *list) {
     }
 }
 
+void movePtrByData(char *model, doublelist *list) {
+  node **root = &list->root;
+  node **now = &list->now;
+
+  if (*root == NULL) return;
+  for (*now = *root; *now != NULL; *now = (*now)->next) {
+      if (strcmp((*now)->data.model, model) == 0) break;
+  }
+}
+
 element newElement() {
     element data;
     printf("Model: ");
@@ -66,8 +80,9 @@ element newElement() {
     return data;
 }
 
-node *newNode(element data) {
+node *newNode(element data, int count) {
     node *new = (node *) malloc(sizeof(node));
+    data.count = count;
     new->data = data;
     new->prev = NULL;
     new->next = NULL;
@@ -157,11 +172,11 @@ void insertByIndex(doublelist *list) {
     printf("Enter index: ");
     scanf("%d", &index);
     if (index == 0) {
-        insertAtHead(newNode(newElement()), list);
+        insertAtHead(newNode(newElement(), 0), list);
     } else {
         if (index > 0) { index -= 1; }
         movePtrByIndex(index, list);
-        insertAfter(newNode(newElement()), list);
+        insertAfter(newNode(newElement(), 0), list);
     }
 }
 
@@ -169,11 +184,6 @@ void deleteNode(doublelist *list) {
     node **root = &list->root;
     node **now = &list->now;
     node **tail = &list->tail;
-
-    if (*root == NULL) {
-      printf("Nothing to delete\n");
-      return;
-    }
 
     if (*now == *root && *now == *tail) {
       *root = *tail = NULL;
@@ -215,8 +225,9 @@ void deleteList(doublelist *list) {
 
 void printNode(node *cur) {
     printf(
-        "%-30s\t%d GB\t%.2f\"\t%.d VND\n",
-        cur->data.model, cur->data.memory, cur->data.size, cur->data.price
+        "%d - %-30s\t%d GB\t%.2f\"\t%.d VND\n",
+        cur->data.count, cur->data.model, cur->data.memory,
+        cur->data.size, cur->data.price
         );
 }
 
@@ -250,6 +261,77 @@ void printListFromTail(doublelist *list) {
     }
 }
 
+element parseLine(FILE *read) {
+  element data;
+  char *line = (char *) malloc(MAX_LINE * sizeof(char));
+  if (line == NULL) {
+    printf("Memory allocation failed\n");
+    data.price = -1;
+    return data;
+  }
+
+  if (fgets(line, MAX_LINE, read) == NULL) {
+    data.price = -1;
+    return data;
+  }
+
+  int l = 0;
+  char *p_start = line;
+  char *p_end = NULL;
+  while ((p_end = strchr(p_start, DIV)) != NULL) {
+    *p_end = '\0';
+
+    // Do sth with the string p_start
+    switch (l) {
+      case 0:
+        strcpy(data.model, p_start);
+        break;
+      case 1:
+        data.memory = atoi(p_start);
+        break;
+      case 2:
+        data.size = atof(p_start);
+        break;
+    }
+
+    l++;
+    p_start = p_end + 1;
+  }
+
+  // Do sth with the string p_start
+  *(p_start + strlen(p_start) - 1) = '\0';
+  data.price = atoi(p_start);
+
+  // Done
+  free(line);
+  return data;
+}
+
+void importTextList(char *filename, doublelist *list) {
+  FILE *f;
+  if ((f = fopen(filename, "r")) == NULL) {
+    printf("Cannot open %s\n", filename);
+    return;
+  }
+
+  // Parse line in file to get data
+  element temp;
+  while (1) {
+    temp = parseLine(f);
+
+    // Break if end of file
+    if (temp.price == -1) {
+      break;
+    }
+
+    // Add to list
+    insertAtHead(newNode(temp, 0), list);
+  }
+
+  printf("Done\n");
+  fclose(f);
+}
+
 void importDatList(char *filename, doublelist *list) {
     FILE *f;
     if ((f = fopen(filename, "rb")) == NULL) {
@@ -260,7 +342,7 @@ void importDatList(char *filename, doublelist *list) {
     element data[1];
     while (!feof(f)) {
         int n = fread(data, sizeof(element), 1, f);
-        if (n != 0) insertAfter(newNode(data[0]), list);
+        if (n != 0) insertAfter(newNode(data[0], 0), list);
     }
 
     fclose(f);
@@ -282,75 +364,24 @@ void printList(doublelist *list) {
     }
 }
 
-
-int main(int argc, char *argv[]) {
-    doublelist list;
-    list.root = list.now = list.tail = NULL;
-    int choice, i;
-    do {
-        system("clear");
-        printf("\tChoose your action:\n\n");
-        printf("1. Check empty\n2. Insert after\n3. Insert before\n");
-        printf("4. Insert at head\n5. Insert at tail\n6. Insert at index\n");
-        printf("7. Delete first\n8. Delete current\n9. Delete list\n");
-        printf("10. Print list\n\n0. Exit\n\nYour choice: ");
-        scanf("%d", &choice);
-        getchar();
-        switch (choice) {
-        case 1:
-            system("clear");
-            printf("Empty: %s\n", isEmpty(&list) ? "true" : "false");
-            wait();
-            break;
-        case 2:
-            system("clear");
-            insertAfter(newNode(newElement()), &list);
-            wait();
-            break;
-        case 3:
-            system("clear");
-            insertBefore(newNode(newElement()), &list);
-            wait();
-            break;
-        case 4:
-            system("clear");
-            insertAtHead(newNode(newElement()), &list);
-            wait();
-            break;
-        case 5:
-            system("clear");
-            insertAtTail(newNode(newElement()), &list);
-            wait();
-            break;
-        case 6:
-            system("clear");
-            insertByIndex(&list);
-            wait();
-            break;
-        case 7:
-            system("clear");
-            deleteFirst(&list);
-            wait();
-            break;
-        case 8:
-            system("clear");
-            deleteNode(&list);
-            wait();
-            break;
-        case 9:
-            system("clear");
-            deleteList(&list);
-            wait();
-            break;
-        case 10:
-            system("clear");
-            printListFromRoot(&list);
-            wait();
-            break;
+// Bubble sort
+void sortByCount(doublelist *list) {
+  node **root = &list->root;
+  element temp;
+  int flag = 0;
+  while (flag != 1) {
+    flag = 1;
+    for (node *cur = *root; cur != NULL; cur = cur->next) {
+      if (cur->next != NULL) {
+        if (cur->data.count < cur->next->data.count) {
+          temp = cur->data;
+          cur->data = cur->next->data;
+          cur->next->data = temp;
+          flag = 0;
         }
-    } while (choice != 0);
+      }
+    }
+  }
 
-    system("clear");
-    deleteList(&list);
-    return 0;
+  printf("Done\n");
 }

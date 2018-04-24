@@ -78,6 +78,11 @@ void deleteNode(doublelist *list) {
     node **now = &list->now;
     node **tail = &list->tail;
 
+    if (*root == NULL) {
+      printf("Nothing to delete\n");
+      return;
+    }
+    
     if (*now == *root && *now == *tail) {
       *root = *tail = NULL;
       free(*now);

@@ -81,9 +81,9 @@ void movePtrByData(char *model, linkedList *list) {
 }
 
 // Adding
-node *newNode(element data) {
+node *newNode(element data, int count) {
   node *new = (node *) malloc(sizeof(node));
-  data.count = 0;
+  data.count = count;
   new->data = data;
   new->next = NULL;
   return new;
@@ -149,18 +149,19 @@ void insertAt(int i, linkedList *list) {
   }
 
   if (i == 0) {
-    addHead(newNode(getData()), list);
+    addHead(newNode(getData(), 0), list);
   } else {
     movePtrByIndex(i - 1, list);
-    addAfter(newNode(getData()), list);
+    addAfter(newNode(getData(), 0), list);
   }
 }
 
 // Printing
 void printNode(node *cur) {
   printf(
-    "%-30s\t%d GB\t%.2f\"\t%.d VND\n",
-    cur->data.model, cur->data.memory, cur->data.size, cur->data.price
+    "%d - %-30s\t%d GB\t%.2f\"\t%.d VND\n",
+    cur->data.count, cur->data.model, cur->data.memory,
+    cur->data.size, cur->data.price
   );
 }
 
@@ -351,7 +352,7 @@ void importTextList(char *filename, linkedList *list) {
     }
 
     // Add to list
-    addHead(newNode(temp), list);
+    addHead(newNode(temp, 0), list);
   }
 
   printf("Done\n");
@@ -369,7 +370,7 @@ void importDatList(char *filename, linkedList *list) {
   element data[1];
   while (!feof(f)) {
     int n = fread(data, sizeof(element), 1, f);
-    if (n != 0) addAfter(newNode(data[0]), list);
+    if (n != 0) addAfter(newNode(data[0], 0), list);
   }
 
   fclose(f);
@@ -433,9 +434,9 @@ void splitList(int n1, int n2, linkedList *list) {
   for (node *cur = *root; cur != NULL; cur = cur->next) {
     element temp = cur->data;
     if (x < n1 || x >= n1 + n2) {
-      addAfter(newNode(temp), &list1);
+      addAfter(newNode(temp, 0), &list1);
     } else {
-      addAfter(newNode(temp), &list2);
+      addAfter(newNode(temp, 0), &list2);
     }
 
     x++;
@@ -448,6 +449,28 @@ void splitList(int n1, int n2, linkedList *list) {
 
   printf("Done\n");
   wait();
+}
+
+// Bubble sort
+void sortByCount(linkedList *list) {
+  node **root = &list->root;
+  element temp;
+  int flag = 0;
+  while (flag != 1) {
+    flag = 1;
+    for (node *cur = *root; cur != NULL; cur = cur->next) {
+      if (cur->next != NULL) {
+        if (cur->data.count < cur->next->data.count) {
+          temp = cur->data;
+          cur->data = cur->next->data;
+          cur->next->data = temp;
+          flag = 0;
+        }
+      }
+    }
+  }
+
+  printf("Done\n");
 }
 
 // MAIN
@@ -468,7 +491,7 @@ int main(int argc, char *argv[]) {
     printf("8. Search and update\n9. Split and export\n");
     printf("10. Reverse list\n11. Save to file\n");
     printf("12. Self organization search\n");
-    printf("13. Import from text\n");
+    printf("13. Import from text\n14. Sort by search count\n");
 
     printf("\n0. Exit\n\nYour choice: ");
     scanf("%d", &choice);
@@ -491,9 +514,9 @@ int main(int argc, char *argv[]) {
         scanf("%d", &i);
         getchar();
         if (i == 1) {
-          addBefore(newNode(getData()), &list);
+          addBefore(newNode(getData(), 0), &list);
         } else if (i == 2) {
-          addAfter(newNode(getData()), &list);
+          addAfter(newNode(getData(), 0), &list);
         }
         else {
           printf("Invalid\n");
@@ -581,14 +604,15 @@ int main(int argc, char *argv[]) {
               list.now = list.root;
           } else {
               printf("Model found, what's next?\n");
-              printf("1. Move to front\n2. Transpose\n");
+              printf("1. Move to front\n2. Transpose\n3. Search count\n");
               scanf("%d", &choice);
               getchar();
+              tempData = list.now->data;
+              list.now->data.count += 1;
               switch (choice) {
                 case 1:
-                    tempData = list.now->data;
                     delNode(&list);
-                    addHead(newNode(tempData), &list);
+                    addHead(newNode(tempData, list.now->data.count), &list);
                     printf("Done\n");
                     break;
                 case 2:
@@ -596,6 +620,9 @@ int main(int argc, char *argv[]) {
                     list.now->data = list.prev->data;
                     list.prev->data = tempData;
                     printf("Done\n");
+                    break;
+                case 3:
+                    sortByCount(&list);
                     break;
               }
           }
@@ -606,6 +633,11 @@ int main(int argc, char *argv[]) {
           system("clear");
           delList(&list);
           importTextList("phone.txt", &list);
+          wait();
+          break;
+      case 14:
+          system("clear");
+          sortByCount(&list);
           wait();
           break;
     }

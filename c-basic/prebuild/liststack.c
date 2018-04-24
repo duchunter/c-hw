@@ -84,6 +84,10 @@ element delNode(linkedList *list) {
   node **prev = &list->prev;
 
   element data = list->now->data;
+  if (*root == NULL) {
+    printf("Nothing to delete\n");
+    return data;
+  }
 
   if (*now == *root) {
     *root = (*root)->next;

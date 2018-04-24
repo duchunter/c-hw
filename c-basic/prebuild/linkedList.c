@@ -216,6 +216,11 @@ void delNode(linkedList *list) {
   node **now = &list->now;
   node **prev = &list->prev;
 
+  if (*root == NULL) {
+    printf("Nothing to delete\n");
+    return;
+  }
+
   if (*now == *root) {
     *root = (*root)->next;
     free(*now);
@@ -461,6 +466,7 @@ int main(int argc, char *argv[]) {
     printf("6. Delete current node\n7. Delete first node\n");
     printf("8. Search and update\n9. Split and export\n");
     printf("10. Reverse list\n11. Save to file\n");
+    printf("12. Import from text\n");
 
     printf("\n0. Exit\n\nYour choice: ");
     scanf("%d", &choice);
@@ -468,6 +474,7 @@ int main(int argc, char *argv[]) {
     switch (choice) {
       case 1:
         system("clear");
+        delList(&list);
         importDatList("phoneDB.dat", &list);
         wait();
         break;
@@ -560,6 +567,12 @@ int main(int argc, char *argv[]) {
         system("clear");
         exportDatList(OUTPUT, &list);
         printf("Done\n");
+        wait();
+        break;
+      case 12:
+        system("clear");
+        delList(&list);
+        importTextList("phone.txt", &list);
         wait();
         break;
     }

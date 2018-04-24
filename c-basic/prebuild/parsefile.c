@@ -10,6 +10,7 @@ int parseLine(FILE *f, char divider) {
     return 0;
   }
 
+  //element newElement;
   int l = 0;
   char *p_start = line;
   char *p_end = NULL;
@@ -18,12 +19,14 @@ int parseLine(FILE *f, char divider) {
 
     // Do sth with that string
     printf("%d: %s\n", l, p_start);
+    //strcpy(element.something, p_start);
     l++;
     p_start = p_end + 1;
   }
 
   // Do sth with that string
   printf("%d: %s\n", l, p_start);
+  //strcpy(element.something, p_start);
   l++;
 
   free(line);

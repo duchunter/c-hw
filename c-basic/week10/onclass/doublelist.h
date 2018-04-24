@@ -280,7 +280,7 @@ void printList(doublelist *list) {
 /*
 int main(int argc, char *argv[]) {
     doublelist list;
-    list.root = list.now = list->tail = NULL;
+    list.root = list.now = list.tail = NULL;
     int choice, i;
     do {
         system("clear");

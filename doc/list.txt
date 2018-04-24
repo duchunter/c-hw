@@ -127,9 +127,9 @@ w9-ex3            bank simulator, init by input number of tables, input time
                   but also double list traverse
 
 w10-onclass       binary search with number, sentinel search using double list
-                  self organize search (move to front, transpose) using single
-                  list, test with phone.dat
-
+                  self organize search (move to front, transpose, search count)
+                  using single list, test with phone.dat
+w10-ex1           feature self organize search using double list
 w10-ex2-convert   convert wordlist.txt -> .dat to move file pointer easily
 w10-ex2-look      binary search a word in wordlist, print all relevant words
 w10-ex3-compare   compare list1 and list2, print all what in list1 but not
