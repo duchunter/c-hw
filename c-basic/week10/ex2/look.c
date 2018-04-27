@@ -4,7 +4,7 @@
 
 #define WORD 20
 #define TOTAL 466544
-#define WORDLIST "./wordlist.dat"
+#define WORDLIST "./list.dat"
 
 void lower(char *str) {
   for (int x = 0; x < strlen(str); x++) {
