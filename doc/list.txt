@@ -136,3 +136,11 @@ w10-ex3-compare   compare list1 and list2, print all what in list1 but not
                   in list2 and vice versa, if have same key -> check other val
                   if different -> print. Method: sort both list by key first
                   using bubble sort, and then compare
+
+w11-onclass       just binary tree
+w11-ex1-usopen    get a list of 16 tennis players, create a tournament using
+                  tree, random who win output result to file a.k.a draw a tree
+                  (see result in treegame.txt)
+w11-ex2-booktree  put phonebook data in a binary search tree (email is key),
+                  search tree by email, output to a file a sorted list using
+                  email as a key by taking min node out and delete that node
