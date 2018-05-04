@@ -82,6 +82,7 @@ int main(int argc, char const *argv[]) {
     switch (choice) {
       case 1:
         system("clear");
+        //prettyPrint(root, 0);
         printTree(root);
         wait();
         break;

@@ -20,6 +20,57 @@ Node *newNode(element data) {
   return new;
 }
 
+void padding(char ch, int n) {
+  for (int i = 0; i < n; i++) {
+    putchar(ch);
+  }
+}
+
+void prettyPrint(Node *root, int level) {
+  int i;
+  if (root == NULL) {
+    padding('\t', level);
+    puts("-");
+  } else {
+    prettyPrint(root->right, level + 1);
+    padding('\t', level);
+    printf("%s\n", root->data.tel);
+    prettyPrint(root->left, level + 1);
+  }
+}
+
+/*
+void prettyPrint(Node *root, char *prefix) {
+  char *prefixEnd = prefix + strlen(prefix);
+  if (root != NULL) {
+    printf("%-20s", root->data.name);
+    if (root->left != NULL) {
+      if (root->right == NULL) {
+        printf("\304");
+        strcat(prefix, "      ");
+      } else {
+        printf("\302");
+        strcat(prefix, "\263    ");
+      }
+    }
+
+    prettyPrint(root->left, prefix);
+    *prefixEnd = '\0';
+    if (root->right != NULL) {
+      if (root->left != NULL) {
+        printf("\n%s", prefix);
+        printf("\300");
+      } else {
+        printf("\304");
+      }
+    }
+
+    strcat(prefix, "      ");
+    prettyPrint(root->right, prefix);
+  }
+}
+*/
+
 Node *findNode(Node *root, char *email) {
   if (root == NULL) return NULL;
   if (strcmp(root->data.email, email) == 0) return root;
