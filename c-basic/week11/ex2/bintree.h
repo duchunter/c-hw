@@ -39,38 +39,6 @@ void prettyPrint(Node *root, int level) {
   }
 }
 
-/*
-void prettyPrint(Node *root, char *prefix) {
-  char *prefixEnd = prefix + strlen(prefix);
-  if (root != NULL) {
-    printf("%-20s", root->data.name);
-    if (root->left != NULL) {
-      if (root->right == NULL) {
-        printf("\304");
-        strcat(prefix, "      ");
-      } else {
-        printf("\302");
-        strcat(prefix, "\263    ");
-      }
-    }
-
-    prettyPrint(root->left, prefix);
-    *prefixEnd = '\0';
-    if (root->right != NULL) {
-      if (root->left != NULL) {
-        printf("\n%s", prefix);
-        printf("\300");
-      } else {
-        printf("\304");
-      }
-    }
-
-    strcat(prefix, "      ");
-    prettyPrint(root->right, prefix);
-  }
-}
-*/
-
 Node *findNode(Node *root, char *email) {
   if (root == NULL) return NULL;
   if (strcmp(root->data.email, email) == 0) return root;

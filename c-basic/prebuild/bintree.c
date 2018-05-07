@@ -13,6 +13,49 @@ Node *newNode(int val) {
   return new;
 }
 
+int deleteMin(Node **root) {
+    int temp;
+    if ((*root)->left == NULL) {
+        temp = (*root)->val;
+        *root = (*root)->right;
+        return temp;
+    }
+
+    return deleteMin(&((*root)->left));
+}
+
+void deleteNode(Node **root, int val) {
+    if (*root == NULL) {
+        printf("Nothing to delete\n");
+        return;
+    }
+
+    if (val < (*root)->val) {
+        return deleteNode(&(*root)->left, val);
+    }
+
+    if (val > (*root)->val) {
+        return deleteNode(&(*root)->right, val);
+    }
+
+    if (((*root)->left == NULL) && ((*root)->right == NULL)) {
+        *root = NULL;
+        return;
+    }
+
+    if ((*root)->left == NULL) {
+        *root = (*root)->right;
+        return;
+    }
+
+    if ((*root)->right == NULL) {
+        *root = (*root)->left;
+        return;
+    }
+
+    (*root)->val = deleteMin(&(*root)->right);
+}
+
 void addNode(Node **root, int x) {
   if (*root == NULL) {
     *root = newNode(x);
@@ -31,6 +74,20 @@ void preOrder(Node *root) {
   printf("Node %d\n", root->val);
   preOrder(root->left);
   preOrder(root->right);
+}
+
+void inOrder(Node *root) {
+    if (root == NULL) return;
+    inOrder(root->left);
+    printf("Node %d\n", root->val);
+    inOrder(root->right);
+}
+
+void postOrder(Node *root) {
+    if (root == NULL) return;
+    postOrder(root->left);
+    postOrder(root->right);
+    printf("Node %d\n", root->val);
 }
 
 Node *findNode(Node *root, int x) {
@@ -100,6 +157,25 @@ int ancestor(Node *root, int x, int y) {
   return path(old, y, arr, 0);
 }
 
+void padding(char ch, int n) {
+    for (int i = 0; i < n; i++) {
+        putchar(ch);
+    }
+}
+
+void prettyPrint(Node *root, int level) {
+    int i;
+    if (root == NULL) {
+        padding('\t', level);
+        puts("-");
+    } else {
+        prettyPrint(root->right, level + 1);
+        padding('\t', level);
+        printf("%d\n", root->val);
+        prettyPrint(root->left, level + 1);
+    }
+}
+
 int main(int argc, char const *argv[]) {
   Node *root = NULL;
   int arr[] = {5, 2, 8, 1, 4, 7, 9, 3, 6, 10};
@@ -108,9 +184,13 @@ int main(int argc, char const *argv[]) {
   }
 
   //print_path(root, 10);
-  printf("%d\n", ancestor(root, 8, 10));
+  //printf("%d\n", ancestor(root, 8, 10));
   //delTree(root);
+  preOrder(root);
+  deleteNode(&root, 7);
+  printf("\n");
   //preOrder(root);
+  prettyPrint(root, 0);
   //printf("%s\n", findNode(root, 3) ? "Found" : "Not found");
   //Node *sib = sibling(root, 7);
   //if (sib == NULL) printf("Not found\n");

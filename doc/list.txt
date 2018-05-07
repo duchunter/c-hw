@@ -144,3 +144,12 @@ w11-ex1-usopen    get a list of 16 tennis players, create a tournament using
 w11-ex2-booktree  put phonebook data in a binary search tree (email is key),
                   search tree by email, output to a file a sorted list using
                   email as a key by taking min node out and delete that node
+
+w12-onclass       bintree: lib, focus on delete node, traverse, pretty print
+                  postfix: postfix eval using bintree, and a stack of bintree
+                  countword: count word frequency in a file txt using bintree
+w12-ex1           create a bintree with student name as key
+                  compare name in VN way, read student list from file
+w12-ex2           read a list of payment from file, put info about each id in
+                  a bintree and print out that tree
+w12-ex3           breadth first print, using tennis tournament as an example

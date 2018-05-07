@@ -1,0 +1,13 @@
+A: 1
+a: 2
+and: 2
+ate: 1
+black: 2
+cat: 2
+mouse: 4
+saw: 1
+scared: 2
+small: 2
+spared: 1
+the: 3
+very: 2

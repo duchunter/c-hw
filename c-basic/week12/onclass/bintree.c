@@ -78,15 +78,15 @@ void preOrder(Node *root) {
 
 void inOrder(Node *root) {
     if (root == NULL) return;
-    preOrder(root->left);
+    inOrder(root->left);
     printf("Node %d\n", root->val);
-    preOrder(root->right);
+    inOrder(root->right);
 }
 
 void postOrder(Node *root) {
     if (root == NULL) return;
-    preOrder(root->left);
-    preOrder(root->right);
+    postOrder(root->left);
+    postOrder(root->right);
     printf("Node %d\n", root->val);
 }
 
