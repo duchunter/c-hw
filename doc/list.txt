@@ -32,7 +32,7 @@ jav   		restaurant list, search name, food, lowercase
 
                 // C BASIC
 
-w1-1  		conpare VN name, sort name, count lastname frequency
+w1-1  		conpare VN (use w13) name, sort name, count lastname frequency
 w1-2  		generate random Eng sentences
 w1-3  		calculate e^x using arg
 w1-test 	another version of ex1 but using struct and arr instead of pointer
@@ -149,7 +149,10 @@ w12-onclass       bintree: lib, focus on delete node, traverse, pretty print
                   postfix: postfix eval using bintree, and a stack of bintree
                   countword: count word frequency in a file txt using bintree
 w12-ex1           create a bintree with student name as key
-                  compare name in VN way, read student list from file
+                  compare name in VN (use w13) way, read student list from file
 w12-ex2           read a list of payment from file, put info about each id in
                   a bintree and print out that tree
 w12-ex3           breadth first print, using tennis tournament as an example
+
+w13-sort          insertion, selection, bubble, heap sort with int array
+w13-student       heap sort student list in vn (improved) way
