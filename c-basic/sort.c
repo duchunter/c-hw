@@ -148,7 +148,7 @@ int copyArrByIndex(int des[], int source[], int left, int right) {
 }
 
 void mergeSort(int arr[], int l) {
-    if (l <= 10) {
+    if (l <= 3) {
         insertionSort(arr, l);
     } else {
         int mid = l / 2;
@@ -159,6 +159,10 @@ void mergeSort(int arr[], int l) {
         mergeSort(u, mid);
         mergeSort(c, l - mid);
         merge(u, ul, c, cl, arr);
+        for (int x = 0; x < ul + cl; x++) {
+            printf("%d\n", arr[x]);
+        }
+        printf("\n");
         free(u);
         free(c);
     }
