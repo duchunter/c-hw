@@ -122,49 +122,45 @@ void quickSort(int arr[], int left, int right) {
 }
 
 // Merge sort
-void merge(int arr1[], int l1, int arr2[], int l2, int final[]) {
-    int l = 0, i = 0, j = 0;
-    while (l < l1 + l2) {
-        if (arr1[i] < arr2[j]) {
-            final[l] = arr1[i];
-            i++;
+void merge(int arr[], int left, int mid, int right) {
+    int l, i = left, j = mid + 1;
+    int *temp = (int *) malloc((right - left + 1) * sizeof(int));
+    if (temp == NULL) {
+      printf("Memory allocation failed\n");
+      return;
+    }
+
+    for (l = 0; l < right - left + 1; l++) {
+      if (i > mid) {
+        temp[l] = arr[j];
+        j++;
+      } else if (j > right) {
+        temp[l] = arr[i];
+        i++;
+      } else {
+        if (arr[i] < arr[j]) {
+          temp[l] = arr[i];
+          i++;
         } else {
-            final[l] = arr2[j];
-            j++;
+          temp[l] = arr[j];
+          j++;
         }
-
-        l++;
-    }
-}
-
-int copyArrByIndex(int des[], int source[], int left, int right) {
-    int x, l = 0;
-    for (x = left; x < right; x++) {
-        des[l] = source[x];
-        l++;
+      }
     }
 
-    return l;
+    for (int x = 0; x < l; x++) {
+      arr[x + left] = temp[x];
+    }
+
+    free(temp);
 }
 
-void mergeSort(int arr[], int l) {
-    if (l <= 3) {
-        insertionSort(arr, l);
-    } else {
-        int mid = l / 2;
-        int *u = (int *) malloc(mid * sizeof(int));
-        int *c = (int *) malloc((l - mid) * sizeof(int));
-        int ul = copyArrByIndex(u, arr, 0, mid);
-        int cl = copyArrByIndex(c, arr, mid + 1, l);
-        mergeSort(u, mid);
-        mergeSort(c, l - mid);
-        merge(u, ul, c, cl, arr);
-        for (int x = 0; x < ul + cl; x++) {
-            printf("%d\n", arr[x]);
-        }
-        printf("\n");
-        free(u);
-        free(c);
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+      int mid = (left + right) / 2;
+      mergeSort(arr, left, mid);
+      mergeSort(arr, mid + 1, right);
+      merge(arr, left, mid, right);
     }
 }
 
@@ -177,10 +173,10 @@ void wait () {
 
 void printArr(int arr[], int l) {
     for (int x = 0; x < l; x++) {
-        printf("%d\n", arr[x]);
+        printf("%d ", arr[x]);
     }
 
-    //printf("\n");
+    printf("\n");
 }
 
 void createArr(int arr[], int temp[], int l) {
@@ -315,7 +311,7 @@ int main(int argc, char *argv[]) {
             system("clear");
             printf("Merge sort, processing...\n");
             start = clock();
-            mergeSort(temp, l);
+            mergeSort(temp, 0, l - 1);
             stop = clock();
             printArr(temp, l);
             printf(

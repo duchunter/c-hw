@@ -156,3 +156,6 @@ w12-ex3           breadth first print, using tennis tournament as an example
 
 w13-sort          insertion, selection, bubble, heap sort with int array
 w13-student       heap sort student list in vn (improved) way
+
+w14-onclass       sort - still sorting, featuring merge sort and quick sort
+                  student - apply quick sort to student list

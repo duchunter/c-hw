@@ -1,18 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Structure
 typedef struct Node {
   int val;
   struct Node *left;
   struct Node *right;
 } Node;
 
+// New node
 Node *newNode(int val) {
   Node *new = (Node *) malloc(sizeof(Node));
   new->val = val;
   return new;
 }
 
+// Delete node
 int deleteMin(Node **root) {
     int temp;
     if ((*root)->left == NULL) {
@@ -56,6 +59,7 @@ void deleteNode(Node **root, int val) {
     (*root)->val = deleteMin(&(*root)->right);
 }
 
+// Add new node
 void addNode(Node **root, int x) {
   if (*root == NULL) {
     *root = newNode(x);
@@ -69,6 +73,7 @@ void addNode(Node **root, int x) {
   }
 }
 
+// Tree traversing
 void preOrder(Node *root) {
   if (root == NULL) return;
   printf("Node %d\n", root->val);
@@ -90,6 +95,7 @@ void postOrder(Node *root) {
     printf("Node %d\n", root->val);
 }
 
+// Find node
 Node *findNode(Node *root, int x) {
   if (root == NULL) return NULL;
   if (root->val == x) return root;
@@ -97,6 +103,25 @@ Node *findNode(Node *root, int x) {
   return temp ? temp : findNode(root->right, x);
 }
 
+// Find depth of node
+int depthNode(Node *root, int key) {
+  if (root == NULL) return 0;
+  if (root->val == key) return 1;
+  int isFoundLeft = depthNode(root->left, key);
+  int isFoundRight = depthNode(root->right, key);
+  if (isFoundLeft) return 1 + isFoundLeft;
+  if (isFoundRight) return 1 + isFoundRight;
+}
+
+// Find depth of tree
+int depthTree(Node *root) {
+  if (root == NULL) return 0;
+  int depthLeft = 1 + depthTree(root->left);
+  int depthRight = 1 + depthTree(root->right);
+  return (depthLeft > depthRight) ? depthLeft : depthRight;
+}
+
+// Find parent of node
 Node *parent(Node *root, int x) {
   if (root == NULL) return NULL;
   if (
@@ -110,11 +135,13 @@ Node *parent(Node *root, int x) {
   return temp ? temp : parent(root->right, x);
 }
 
+// Find sibling of node
 Node *sibling(Node *root, int x) {
   Node *dad = parent(root, x);
   return (dad->left && dad->left->val == x) ? dad->right : dad->left;
 }
 
+// Delete tree
 void delTree(Node *root) {
   if (root == NULL) return;
   printf("%d\n", (root)->val);
@@ -125,6 +152,7 @@ void delTree(Node *root) {
   delTree(left);
 }
 
+// Find path to node
 int path(Node *root, int x, int arr[], int l) {
   if (root == NULL) return 0;
   if (root->val == x) {
@@ -150,6 +178,7 @@ void print_path(Node *root, int x) {
   }
 }
 
+// Check if node is ancestor
 int ancestor(Node *root, int x, int y) {
   Node *old = findNode(root, x);
   if (old == NULL) return 0;
@@ -157,6 +186,7 @@ int ancestor(Node *root, int x, int y) {
   return path(old, y, arr, 0);
 }
 
+// prettyPrint
 void padding(char ch, int n) {
     for (int i = 0; i < n; i++) {
         putchar(ch);
@@ -176,6 +206,14 @@ void prettyPrint(Node *root, int level) {
     }
 }
 
+// Count lower/bigger
+int lowerThan(Node *root, int key) {
+  if (root == NULL) return 0;
+  return (root->val < key)
+         + lowerThan(root->left, key)
+         + lowerThan(root->right, key);
+}
+
 int main(int argc, char const *argv[]) {
   Node *root = NULL;
   int arr[] = {5, 2, 8, 1, 4, 7, 9, 3, 6, 10};
@@ -189,8 +227,11 @@ int main(int argc, char const *argv[]) {
   preOrder(root);
   deleteNode(&root, 7);
   printf("\n");
+  //printf("Lower than 5: %d\n", lowerThan(root, 5));
   //preOrder(root);
   prettyPrint(root, 0);
+  //printf("Depth of 4: %d\n", depthNode(root, 4));
+  printf("Depth tree: %d\n", depthTree(root));
   //printf("%s\n", findNode(root, 3) ? "Found" : "Not found");
   //Node *sib = sibling(root, 7);
   //if (sib == NULL) printf("Not found\n");
