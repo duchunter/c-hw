@@ -1,0 +1,5 @@
+sinhvien.com 1.1.1.1
+bachkhoa.net 255.255.255.255
+cntt.vn 111.22.3.0
+cbasic.com 9.8.7.6
+ctdl.com 1.2.3.44
