@@ -62,21 +62,20 @@ int parseLine(FILE *f, char divider, Node **root) {
 }
 
 int ipcmp(char *ip1, char *ip2) {
-    char *s1 = ip1, *s2 = ip2, *e1, *e2;
-    printf("%s - %s\n", s1, s2);
-    for (int x = 0; x < 4; x++) {
-        e1 = strchr(s1, '.');
-        e2 = strchr(s2, '.');
-        printf("%s - %s", e1, e2);
-        *e1 = '\0';
-        *e2 = '\0';
-        if (atoi(s1) > atoi(s2)) return 1;
-        if (atoi(s1) < atoi(s2)) return -1;
-        s1 = e1 + 1;
-        s2 = e2 + 1;
+    char *e1, *e2, str1[15], str2[15];
+    e1 = strchr(ip1, '.');
+    e2 = strchr(ip2, '.');
+    if (e1 == NULL && e2 == NULL) {
+      if (atoi(ip1) > atoi(ip2)) return 1;
+      if (atoi(ip1) < atoi(ip2)) return -1;
+      return 0;
     }
 
-    return 0;
+    strncpy(str1, ip1, (e1 - ip1) / sizeof(char));
+    strncpy(str2, ip1, (e2 - ip2) / sizeof(char));
+    if (atoi(str1) > atoi(str2)) return 1;
+    if (atoi(str1) < atoi(str2)) return -1;
+    return ipcmp(e1 + 1, e2 + 1);
 }
 
 
@@ -200,8 +199,8 @@ int main() {
       //EX 4
       case 4:
         system("clear");
-        //printf("\tIP sort\n\n");
-        //printf("%d\n", ipcmp("1.1.1.1", "2.2.2.2"));
+        printf("\tIP sort\n\n");
+        printf("%d\n", ipcmp("11.1.1.1", "2.2.2.2"));
         //Done
         wait();
         break;

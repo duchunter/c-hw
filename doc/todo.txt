@@ -1,1 +1,0 @@
-write find min max for general bintree
