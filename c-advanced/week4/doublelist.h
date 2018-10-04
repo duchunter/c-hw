@@ -10,10 +10,11 @@ void wait() {
 }
 
 typedef struct {
-    char model[30];
-    int memory;
-    float size;
-    int price;
+    int id;
+    int x;
+    int y;
+    double distance; // Distance to storage
+    int load; // Total package left
 } element;
 
 typedef struct node {
@@ -54,6 +55,7 @@ void movePtrByIndex(int index, doublelist *list) {
 
 element newElement() {
     element data;
+    /*
     printf("Model: ");
     scanf("%[^\n]", data.model);
     printf("Memory: ");
@@ -63,6 +65,7 @@ element newElement() {
     printf("Price: ");
     scanf("%d", &data.price);
     getchar();
+    */
     return data;
 }
 
@@ -216,11 +219,12 @@ void deleteList(doublelist *list) {
 
 void printNode(node *cur) {
     printf(
-        "%-30s\t%d GB\t%.2f\"\t%.d VND\n",
-        cur->data.model, cur->data.memory, cur->data.size, cur->data.price
-        );
+      "%d\t%d\t%d\t%d\t%.2lf\n",
+      cur->data.id, cur->data.x, cur->data.y, cur->data.load, cur->data.distance
+    );
 }
 
+/*
 void printListFromRoot(doublelist *list) {
     node **root = &list->root;
     int page = 0;
@@ -235,7 +239,9 @@ void printListFromRoot(doublelist *list) {
         }
     }
 }
+*/
 
+/*
 void printListFromTail(doublelist *list) {
     node **tail = &list->tail;
     int page = 0;
@@ -251,6 +257,9 @@ void printListFromTail(doublelist *list) {
     }
 }
 
+*/
+
+/*
 void importDatList(char *filename, doublelist *list) {
     FILE *f;
     if ((f = fopen(filename, "rb")) == NULL) {
@@ -266,6 +275,7 @@ void importDatList(char *filename, doublelist *list) {
 
     fclose(f);
 }
+*/
 
 void printList(doublelist *list) {
     node **root = &list->root;
@@ -281,77 +291,4 @@ void printList(doublelist *list) {
             page = 0;
         }
     }
-}
-
-
-int main(int argc, char *argv[]) {
-    doublelist list;
-    list.root = list.now = list.tail = NULL;
-    int choice, i;
-    do {
-        system("clear");
-        printf("\tChoose your action:\n\n");
-        printf("1. Check empty\n2. Insert after\n3. Insert before\n");
-        printf("4. Insert at head\n5. Insert at tail\n6. Insert at index\n");
-        printf("7. Delete first\n8. Delete current\n9. Delete list\n");
-        printf("10. Print list\n\n0. Exit\n\nYour choice: ");
-        scanf("%d", &choice);
-        getchar();
-        switch (choice) {
-        case 1:
-            system("clear");
-            printf("Empty: %s\n", isEmpty(&list) ? "true" : "false");
-            wait();
-            break;
-        case 2:
-            system("clear");
-            insertAfter(newNode(newElement()), &list);
-            wait();
-            break;
-        case 3:
-            system("clear");
-            insertBefore(newNode(newElement()), &list);
-            wait();
-            break;
-        case 4:
-            system("clear");
-            insertAtHead(newNode(newElement()), &list);
-            wait();
-            break;
-        case 5:
-            system("clear");
-            insertAtTail(newNode(newElement()), &list);
-            wait();
-            break;
-        case 6:
-            system("clear");
-            insertByIndex(&list);
-            wait();
-            break;
-        case 7:
-            system("clear");
-            deleteFirst(&list);
-            wait();
-            break;
-        case 8:
-            system("clear");
-            deleteNode(&list);
-            wait();
-            break;
-        case 9:
-            system("clear");
-            deleteList(&list);
-            wait();
-            break;
-        case 10:
-            system("clear");
-            printListFromRoot(&list);
-            wait();
-            break;
-        }
-    } while (choice != 0);
-
-    system("clear");
-    deleteList(&list);
-    return 0;
 }
