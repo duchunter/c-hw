@@ -85,7 +85,7 @@ RoutePlan* split(Node* start, int id1, int id2) {
   Node *head = NULL;
   Node *tail = NULL;
 
-  // Traverse input route
+  // Traverse input route to find head and tail of second route
   while (cur != NULL) {
     // Mark head of the second route
     if (cur->id == id1) {
@@ -100,13 +100,40 @@ RoutePlan* split(Node* start, int id1, int id2) {
     cur = cur->next;
   }
 
+  // Swap head and tail if needed
+  if (head->load < tail->load) {
+    cur = head;
+    head = tail;
+    tail = cur;
+  }
+
   // Cut second route from input route
   (head->prev)->next = tail->next;
+
+  // Calculate total load reduced
+  int diff = head->load - tail->load;
+  if (diff == 0) {
+    diff = head->load - head->next->load;
+  }
+
+  // Reduce total load from first route
+  int total = start->load;
+  for (cur = start; cur != NULL; cur = cur->next) {
+    cur->load -= diff;
+    if (cur->id == head->prev->id) break;
+  }
+
   head->prev = NULL;
   tail->next = NULL;
 
+  // Reduce total load from second route
+  int diff2 = head->load - diff;
+  for (cur = head; cur != NULL; cur = cur->next) {
+    cur->load -= diff2;
+  }
+
   // Add 2 0s node to head and tail to create a new route
-  Node *new = newNode(0, 0, 0, 0, 0);
+  Node *new = newNode(0, 0, 0, 0, diff);
   new->next = head;
   head->prev = new;
 
@@ -133,19 +160,23 @@ Node* createSingleRoute(char* filename) {
   }
 
   // Scan number of client and eliminate first 0s line
-  int id, x, y, load, total;
-  fscanf(f, "%d", &total);
+  int id, x, y, load, clients, totalLoad = 0;
+  fscanf(f, "%d", &clients);
   fscanf(f, "%d", &id);
   fscanf(f, "%d", &x);
   fscanf(f, "%d", &y);
 
   // Scan all other node and push into list
-  for (int i = 0; i < total; i++) {
+  for (int i = 0; i < clients; i++) {
     fscanf(f, "%d", &id);
     fscanf(f, "%d", &x);
     fscanf(f, "%d", &y);
     fscanf(f, "%d", &load);
 
+    // Save total load
+    totalLoad += load;
+
+    // Create new node and append to route
     new = newNode(id, x, y, 0, load);
     cur->next = new;
     new->prev = cur;
@@ -153,7 +184,14 @@ Node* createSingleRoute(char* filename) {
     cur->distance = getDistance(root, cur);
   }
 
-  // Last node will also 0
+  // Reduce total load each node
+  for (Node *temp = root; temp != NULL; temp = temp->next) {
+    load = temp->load;
+    temp->load = totalLoad;
+    totalLoad -= load;
+  }
+
+  // Append last node (0)
   new = newNode(0, 0, 0, 0, 0);
   cur->next = new;
   new->prev = cur;
@@ -169,7 +207,7 @@ int main() {
   printRoute(initRoute);
 
   printf("Split from 2 to 6\n");
-  RoutePlan* plan = split(initRoute, 2, 6);
+  RoutePlan* plan = split(initRoute, 1, 1);
   printPlan(plan);
 
   return 0;
