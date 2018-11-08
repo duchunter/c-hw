@@ -89,29 +89,28 @@ int main(int argc, char const *argv[]) {
   int hash, mark, x;
   char str[1000];
 
-  /*
-  FILE *f = fopen("./DICTIONARY/Test09/DICTIONARY.INP", "r");
+
+  FILE *f = fopen("./DICTIONARY/Test07/DICTIONARY.INP", "r");
   if (f == NULL) {
     printf("Cannot open test file\n");
     return -1;
   }
-  */
 
-  //fscanf(f, "%s", str);
-  scanf("%s", str);
+
+  fscanf(f, "%s", str);
+  //scanf("%s", str);
   while (strcmp(str, "-1") != 0) {
     hash = stringHashing(str);
     mark = isExist(hash, markTable, l);
     if (mark == -1) {
       markTable[l] = hash;
       l += 1;
-      hashTable[hash] = newNode(str);
-    } else {
-      addNode(&hashTable[markTable[mark]], str);
     }
 
-    //fscanf(f, "%s", str);
-    scanf("%s", str);
+    addNode(&hashTable[hash], str);
+
+    fscanf(f, "%s", str);
+    //scanf("%s", str);
   }
 
   for (x = 0; x < l; x++) {
@@ -119,7 +118,7 @@ int main(int argc, char const *argv[]) {
   }
 
   printf("%d\n", max);
-  //fclose(f);
+  fclose(f);
   free(hashTable);
   return 0;
 }
