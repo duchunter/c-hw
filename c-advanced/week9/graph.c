@@ -28,7 +28,6 @@ int allVisited(int length) {
   return -1;
 }
 
-
 int main(int argc, char const *argv[]) {
   // Get number of nodes and list
   int nodes, edges, x, a, b;
@@ -52,7 +51,7 @@ int main(int argc, char const *argv[]) {
   // Count
   int count = 1;
   visit(1);
-  int x = allVisited(nodes);
+  x = allVisited(nodes);
   while (x != -1) {
     count += 1;
     visit(x);
