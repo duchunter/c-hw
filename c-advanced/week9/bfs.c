@@ -31,7 +31,7 @@ int isEmpty() {
 }
 
 int isFull() {
-    if (isEmpty(q)) return 0;
+    if (isEmpty()) return 0;
     int a = q.front;
     int b = q.rear;
     if (b == MAX - 1) {
@@ -43,7 +43,7 @@ int isFull() {
 
 Node enqueue(int val, int level) {
     Node newNode;
-    if (isFull(q)) {
+    if (isFull()) {
         //printf("Max cap reached\n");
         return newNode;
     }
@@ -51,7 +51,7 @@ Node enqueue(int val, int level) {
     newNode.val = val;
     newNode.level = level;
 
-    if (isEmpty(q)) {
+    if (isEmpty()) {
         q.front = q.rear = 0;
         q.data[0] = newNode;
     } else {
@@ -68,7 +68,7 @@ Node enqueue(int val, int level) {
 
 Node dequeue() {
     Node data;
-    if (isEmpty(q)) {
+    if (isEmpty()) {
         //printf("Queue is empty\n");
         return data;
     }
@@ -120,8 +120,8 @@ int main(int argc, char const *argv[]) {
   initialize();
 
   // Get number of nodes and list
-  int nodes, edges, x, a, b;
-  scanf("%d %d", &nodes, &edges);
+  int nodes, edges, x, a, b, start, stop;
+  scanf("%d %d %d %d", &nodes, &edges, &start, &stop);
 
   // Init adjNode
   for (x = 1; x < nodes; x++) {
@@ -139,11 +139,11 @@ int main(int argc, char const *argv[]) {
   }
 
   // Add root to queue
-  enqueue(1, 0);
-  visited[1] = 1;
+  enqueue(start, 0);
+  visited[start] = 1;
 
   // Search
-  bfs(7);
+  bfs(stop);
 
   return 0;
 }
