@@ -1,0 +1,135 @@
+                            // C BASIC
+
+w1-1  		conpare VN (use w13) name, sort name, count lastname frequency
+w1-2  		generate random Eng sentences
+w1-3  		calculate e^x using arg
+w1-test 	another version of ex1 but using struct and arr instead of pointer
+w1-tt 		find median,
+compare 2 arrays about equality and symmetry
+count the frequency of each letter in a string
+split sentence to words
+calculate rectangle's area and perimeter using arg
+word replication using arg
+
+w2-1 				argcv, replace a string in a string with a string
+w2-s1 				just print new str, not save to var
+w2-replace 		hw1 but use strstr() to find substring
+w2-2  				argcv, copy a file to a new file
+w2-3  				argcv, transform content of a file to uppercase
+w2-transform  	hw3 but move file pointer back instead of re-open file
+w2-tt-1 			split int and frac part of a double using pointer
+w2-tt-2 			replace a char in a string with a char
+w2-tt-3 			solve ax^2 + bx + c using command line arg
+w2-tt-4 			open and close file
+w2-tt-5 			copy file
+w2-tt-6 			a -> A and vice versa from a file to a new file
+
+w3-1  	encrypt and decrypt file
+w3-2  	count char in a file and save result to external file
+w3-3  	another version of "cat" command, add "-p" to display page and more page
+
+
+w4-tt-1+2     dynamically reverse array and ask for more input using alloc
+w4-tt-3       my strcat using malloc
+w4-tt-4       check if in circle
+w4-tt-5       read file, print line length + line
+w4-tt-6       merge 2 files
+w4-substrc    return substr with 'number' char that start from 'offset' of a str
+w4-circle     check if 2 circle intercept, dynamically add circle by either
+manually input or randomly generate, print info about circle
+print circle with most interception and circles it intercept with
+w4-student    read a student list from a file, dynamically added to an array,
+ask for grade input an write to an output file
+w4-filter     read words from a file and dynamically add to an array,
+read a file, replace all negative word by special char
+print new content to the screen
+
+
+w5-tt-1       copy file using block style
+w5-tt-2       phone book block style
+w5-tt-3       locate and update data in specific index in a file
+w5-tt-4       create file's header
+w5-copy       menu copy file using char style, line style and blockstyle
+w5-student    convert student grade.txt to .dat, display data in .dat,
+search student by id, change mark and write back to .dat
+w5-phone      convert phone.txt to .dat, read from .dat (read all or part) with
+page mode, read all phone of a manufacturer, search phone by model
+w5-dict       convert dict.txt to .dat, read part of .dict by start and end
+
+
+
+w6-ex1-merge    merge 2 files
+w6-ex1-read     read .dat file
+w6-ex1-split    split to 2 files based on input index
+w6-ex1-phone..  phonebook used to create phone.dat, others are testing result
+
+w6-ex2-phone    menu
+1 = import data from text file to linked list, parse by line
+2 = import from .dat, parse block
+3 = display list
+4 = search list by model
+5 = search by price below
+6 = export list to .dat file
+
+w6-ex3-phonebook  featuring add after and add before
+w6-ex4-list       contain everything about linked list, featuring insert at
+  index and del at index
+
+w7-list           featuring split list, now all functions about linked list are
+  moved to /prebuild
+
+w8-bignum         perform addition and subtraction with big number using stack
+w8-undo           undo action using stack
+
+w9-ex1            change math expression from infix to postfix, parse postfix
+  and output result, using queue
+w9-ex2            os simulator, init by input number of concurrent process and
+  max memory, create new process with id and memory require. If
+  Remaining memory is available, execute it, if not, put it in
+  a queue and wait. Terminate process using kill function to
+  free memory, using queue
+w9-ex3            bank simulator, init by input number of tables, input time
+  and number of customers, push them in a corresponding queue
+  (lowest) wait time, count waiting customers and total wait
+  time, time change -> wait time change, using not only queue
+  but also double list traverse
+
+w10-onclass       binary search with number, sentinel search using double list
+  self organize search (move to front, transpose, search count)
+  using single list, test with phone.dat
+w10-ex1           feature self organize search using double list
+w10-ex2-convert   convert wordlist.txt -> .dat to move file pointer easily
+w10-ex2-look      binary search a word in wordlist, print all relevant words
+w10-ex3-compare   compare list1 and list2, print all what in list1 but not
+  in list2 and vice versa, if have same key -> check other val
+  if different -> print. Method: sort both list by key first
+  using bubble sort, and then compare
+
+w11-onclass       just binary tree
+w11-ex1-usopen    get a list of 16 tennis players, create a tournament using
+  tree, random who win output result to file a.k.a draw a tree
+  (see result in treegame.txt)
+w11-ex2-booktree  put phonebook data in a binary search tree (email is key),
+  search tree by email, output to a file a sorted list using
+  email as a key by taking min node out and delete that node
+
+w12-onclass       bintree: lib, focus on delete node, traverse, pretty print
+  postfix: postfix eval using bintree, and a stack of bintree
+  countword: count word frequency in a file txt using bintree
+w12-ex1           create a bintree with student name as key
+  compare name in VN (use w13) way, read student list from file
+w12-ex2           read a list of payment from file, put info about each id in
+  a bintree and print out that tree
+w12-ex3           breadth first print, using tennis tournament as an example
+
+w13-sort          insertion, selection, bubble, heap sort with int array
+w13-student       heap sort student list in vn (improved) way
+
+w14-onclass       sort - still sorting, featuring merge sort and quick sort
+  student - apply quick sort to student list
+
+final             IP lookup, 1. input ip from text file into binary tree and
+  print in inorder, 2. find ip by domain, if in form of www.
+  still can find domain, 3. Input block website from text files
+  can be either domain or ip, find ip by domain again, but show
+  block status, 4. compare 2 domain

@@ -77,10 +77,10 @@ void init(){
     //sum = 0;
 }
 
-void update(){
-    if (sum + C[x[n]][x[1]] < best){
-        best = sum + C[x[n]][x[1]];
-        for (int i=1; i<=n; i++) bestSolution[i] = x[i];
+void update() {
+    if (sum + C[x[n]][x[1]] < best) {
+      best = sum + C[x[n]][x[1]];
+      for (int i=1; i<=n; i++) bestSolution[i] = x[i];
     }
 }
 

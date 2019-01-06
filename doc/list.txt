@@ -165,3 +165,50 @@ final             IP lookup, 1. input ip from text file into binary tree and
                   still can find domain, 3. Input block website from text files
                   can be either domain or ip, find ip by domain again, but show
                   block status, 4. compare 2 domain
+
+
+                              // C ADVANCED
+
+w1-add          a + b = c
+
+w1-sort         quicksort
+
+w2-ckn          find C(k, n), using add mod function to prevent overflow and
+          memory table to avoid recalculate the same values
+
+w2-le           find all possible x for ax + by + cz = d (i guess...)
+
+w3-tsp          shipper, find shortest path
+
+w4              practice with doublelist
+
+w5              shipper, find better path using 2 opt
+
+w6              practice with tree, find depth and height
+
+w7              a dictionary, hash string first then each hash has a binary tree
+          find the most frequent word count
+
+w9-bfs          breadth first search
+
+w9-graph        count number of isle :v using depth first search
+
+w10             basic Dijkstra
+
+w11             improved Dijikstra using priority queue
+
+w12-chess       how to move a Knight on every square on a chess table
+
+test-diam       find diameter of a graph, using Floyd-Warshall to find shortest
+          path from any a to any b
+
+test-entity     find all possible combination of 3 friends
+
+test-expr       a ? b ? c ? d = e, fill ? with + or -
+
+test-expreval   basic math + mod a large number
+
+test-kcycle     find a circle with n vertices and smallest weight in a undirected
+          graph using dfs
+
+test-svg        evaluate student using linked list

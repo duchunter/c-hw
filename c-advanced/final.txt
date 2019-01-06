@@ -1,0 +1,4 @@
+- Scan array: cal (a + b) or (a * b) mod 10^9 + 7, overflow
+- Backtracking: a + b + c + d = 100, ABCD +(-) DEFG = 100
+- Sort: quick sort
+- Graph: dijkstra, G(V, E), DFS, BFS, matrix
